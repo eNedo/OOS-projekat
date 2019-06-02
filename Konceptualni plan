@@ -79,4 +79,90 @@ Ako direktorijumi imaju podirektorijume onda cemo na njihovom zavrsetku citanja 
 
 
  Ako nesto fali samo dodavajte
+ おはじょ
+ Sa prvog zasijedanja zavisne komunisticke anti radne totalno kapitalno koruptne partije 
+
+velicija bloka u fajl sistem za data blok  iznosi 512 bajtova i odnosi se samo na data blok.
+Data blok se nalazi udaljen tacno 2MB od pocetka binarnog fajla ( moemo smanjiti ako sutra kaze da ne moramo previti previse fajlova na 1.4MB)
+ali za sada dva.
+MTF na pocetu se ptvo nalazi root diredtorijum u kom se nalaze sve informacije vezane za fail sistem on zauzima fiksnu velicinu i sadrzi sve kao ditektorijum (klasicni ) plus dodatne promjenljive i funkcije koje su karakteristicne za root
+nakon root info dolaze direktorijumi u kojima se nalazi sve gore navedeno oni imaju fiksnu velicinu trenutno od 300B i upisuju se odmah posle root info u binarni fajl 
+sekvencijalno.
+-svaki root sadrzi niz u kome se memorise pocetni blok ( u mft ne u data ) gdje se nalazi heder za dati direktorijum unutar mft-a i redom se memorisu svi direktorijumi unutar tor direktorijuma sve dok se ne +++naidje na negativne brojeve koji oznacavaju fajlove
+misli ce na to da se pozitivnim brojevima oznacavaju direktorijumi a negativnim brojevima fajlovi (taj broj moramo prebaciti u pozitivan i to nam je onda lokacija hedera unutar mft-a)
+razlog ovome je kada se dodaju novi fajlovi ili direktorijumi da ne moramo non stop pomijerati elemente u nizu sto ce kostati vremena ovako samo idemo i gledamo da li je pozitivan ili ne 
+ostala logika ostaje ista kao sto smo se dogovorili.
+-fajl u sebi sadrzi sve gore navedeno i on se u mft memorise od kraja mft-a i fiksne je velicine logika fajlova i direktorijuma je kao steka i hipa 
+oni rasti jedan prema drugom  provjeru da nece doci do preklapanja ))?? na naci da stavimo 16 bajtova na vrh fajl niza i 16 bajta na kraj niza direktorijuma i provjeravamo posebno za direktorijume i fajlove tako sto uzmemo njihovu velicinu u bajtovima i provjerimo da li se u narednom segmentu nalazi slucajno vise od 7 uzastopnih jedinica ako se to desi znaci da postoji sansa da prepisemo kraj niza direktorijuma ili obrnuto fajlova 
++++++++DORADITI OVO ++++++++
+-unutar dajla imamo blok koji u sebi sadrzi pocetnu lokaciju (prvi blok gdje je memorisan podatak) i duzinu (koliko blokova je uzeo u memoriju da znamo kao sigurnost (da sve procitamo)
+----
+ispod ovoga ce se nalaciti niz u kome su memorisani svi blokovi (pozicije gdje se nalaze u odnosu na pocetak ) i kazuju da li je blok zauzet ili se jos koristi 
+svaki put kada se izbrise fajl ili firektorijum treba da se u ovom nizu izvrsi update isto vazi i za upis podataka;-
+------
+u data segmentu ----------
+-sve je podijeljeno u blokove od 512B i na u koje se memorise nas podatak s tim da ce mo izgubiti 4B na kraju bloka koji ce govoriti gdje se nalazi sledeci blok u koji je memorisan ostatak nasef fajla 
+-u data segmentu ce se memorisati samo fajlovi direktorijumi ce se nalaziti u mft-u 
+-memorisanje fajlova na pocetku dok se ne popuni pocinje od kraja data segmenta sve dok mogu podatci stati (da se upisuju sekvencijalno )
+ukoliko to nije moguce onda upisati koliko se moze i vratiti se na pocetak data segmenta 
+-u root direktorijumu voditi racuna o slobodnom prostoru ( update svaki upis i izmjenu velicine fajla ) isto vazi i za direktorijum u kom se fajl nalazi 
+======
+----
+opcije kao brisanje fajla,pomijeranje fajla (iz jednog dir u drugi ),preimenovanje i slicne operacije ce se raditi samo nad direktorijumima u njima ce se raditi te manipulacije 
+----
+kada korisnik kreira pracan fajl ili direktorijum u tom direktorijumu ce se kreirati heder sa svim informacjama ali nece biti popunjeni podatci o blokovima bice 00
+----
+trazenje fajlova ce se odvijati preko path treba ce nam funkcije za stringove i globalna jedna promjenljiva koja moze da se vidi iz svih funkcija koje koriste path 
+da ne moramo raditi rekurcije i slicno kontam lakse nam je jednu globalnu i fju samo odsijecati i slati funkciji i funkciju pozivati onoliko puta sve dok ne dodjemo do trazene lokacije 
+\ ce nam biti terminator za kraj stringa 
+----
+funkcija goToBlock() ce primati velicinu bloka i pocetnu poziciju da je mozemo iskoristiti i za mft i za data segment tako da ce mo morati imati i velicine hedera i data segmenata negdje memorisane 
+to mozemo spakovati u heder od roota koa dodatni info 
+----
+funkcija findData() bi trebala primati path i sa pocetka ga odsijecati i porediti fajlove po nivoima a potom po dubini kalsican search s tim da ce nam trebati funkcije za manipulaciju sa stringovima ali one imaju gotove u javi 
+----
+funkciju koja ce nam vracati path mozemo napraviti temp niz koji ce memorisati nasu poziciju trenutno u fajlu kada udjemo u fajl da noda na niz a kada izadjemo da ukloni 
+---
+get metoda treba da sa racunara dohvati fajl i upise ga u nas sistem tu koristiti univerzalne funkcije za upis hedera i za upis u data segment (memorisanje )
+tako da mozemo koristiti univerzalno ili napraviti jednu kojoj prosledjumemo u koju vrstu bloka upisujemo i njegovu lokaciju gdje ce se upisati 
+mozda ovo bolje 
+----
+komanda ls samo da procita direktirijume i fajlove iz niza onog i ispise imena na ekranu 
+!!!!!! moramo zapamtiti ili bolje odrediti kojim redoslijedom ce mo memorisati podatke tako da smo umogucnosti direktno da skacemo sa lokacije na lokaciju bez da ucitavamo fajl(u smislu prvo one promjenljive koje zauzimaju malo prostora a onda one velike )
+da negubimo vremena na trazenju po bloku !!!!
+----
+echo da realizujemo preko dinamicke alokacije kada pozove echo da napravimo dinamicki fajl pustimo da se u njega upisuje sta god se hoce i onda pozovemo funkciju za upis i upisemo ako je na dusku samo prepisemo postojeci fajl a ako nije funkciju za cisti upis i raspaliti 
+!!!!@ trebamo imati jednu globalnu u kojoj ce se nalaziti trenutna pozicija zadnjeg memorisanog bloka u data segmentu @@@@
+!!!!
+moramo rijesiti jos za onu rezidentnost za fajlove koji su manji od 128B kako da njig cuvamo u mft-u ako ce mo koristiti niz na nacin da nam negativni brojevi oznacavaju fajlove a pozitivni dir 
+moramo nekako napraviti nesto da mozemo razlikovati koji su ti specijalni fajlovi u kojima je memorisano ono 128B
+
+
+((((()))))))
+Fight Bugs                      |     |
+                                \\_V_//
+                                \/=|=\/
+                                 [=v=]
+                               __\___/_____
+                              /..[  _____  ]
+                             /_  [ [  M /] ]
+                            /../.[ [ M /@] ]
+                           <-->[_[ [M /@/] ]
+                          /../ [.[ [ /@/ ] ]
+     _________________]\ /__/  [_[ [/@/ C] ]
+    <_________________>>0---]  [=\ \@/ C / /
+       ___      ___   ]/000o   /__\ \ C / /
+          \    /              /....\ \_/ /
+       ....\||/....           [___/=\___/
+      .    .  .    .          [...] [...]
+     .      ..      .         [___/ \___]
+     .    0 .. 0    .         <---> <--->
+  /\/\.    .  .    ./\/\      [..]   [..]
+ / / / .../|  |\... \ \ \    _[__]   [__]_
+/ / /       \/       \ \ \  [____>   <____]
+
+
+
+
+
 
