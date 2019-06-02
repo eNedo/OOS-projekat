@@ -1,4 +1,3 @@
-
 public class DirectoryClass {
 private String NameOfDirectory;
 private String DateCreated;

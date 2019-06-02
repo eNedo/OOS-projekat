@@ -1,4 +1,6 @@
- public class FileClass {
+
+
+public class FileClass {
 private String NameOfFile;
 private byte FileAllocate; 
 private byte isDirectory; 
