@@ -83,7 +83,7 @@ Ako direktorijumi imaju podirektorijume onda cemo na njihovom zavrsetku citanja 
  Sa prvog zasijedanja zavisne komunisticke anti radne totalno kapitalno koruptne partije 
 
 velicina bloka u fajl sistem za data blok  iznosi 512 bajtova i odnosi se samo na data blok.
-Data blok se nalazi udaljen tacno 2MB od pocetka binarnog fajla ( moemo smanjiti ako sutra kaze da ne moramo previti previse fajlova na 1.4MB)
+Data blok se nalazi udaljen tacno 2MB od pocetka binarnog fajla ( mozemo smanjiti ako sutra kaze da ne treba previti previse fajlova na 1.4MB)
 ali za sada dva.
 MTF na pocetku se prvo nalazi root diredtorijum u kom se nalaze sve informacije vezane za fail sistem on zauzima fiksnu velicinu i sadrzi sve kao ditektorijum (klasicni ) plus dodatne promjenljive i funkcije koje su karakteristicne za root
 nakon root info dolaze direktorijumi u kojima se nalazi sve gore navedeno oni imaju fiksnu velicinu trenutno od 300B i upisuju se odmah posle root info u binarni fajl 
