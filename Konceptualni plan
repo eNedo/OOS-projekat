@@ -1,0 +1,82 @@
+File class 
+			-imefajla 30bajta
+			-file allocate 1bajt
+			-isDirectory 1bajt
+			-dateCreated 30bajta
+			-dateUpdated 30bajta
+			-DateLastUsed 30bajta
+			-FileSize 4bajta
+			-BitMap * 8bajta
+	
+		size==134
+Maksimalno 7825 fajlova
+Root 		
+-Name 30bajta
+	-isDirectory 1bajta
+	-createdDate 30bajta
+	-LastUsed 30bajta
+	-lastModified 30bajta
+	-fileAlocateFlag 1bajta
+	-ResFlag 1bajta
+	-SystemSize 4bajta
+	-DirectoryArray * subdirectory 256bajta
+	-FreeSpace 4bajta
+	-FreeBlocks 4bajta
+	-ClusterSize 4bajta
+
+Directory
+	-Name 30bajta
+	-isDirectory 1bajta
+	-createdDate 30bajta
+	-LastUsed 30bajta
+	-lastModified 30bajta
+	-fileAlocateFlag 1bajta
+	-ResFlag 1bajt
+	-Block 8bajta
+	-Size 4bajta
+	-Depth 1bajta
+	-signature (subdirectory) - 1bajt
+	Niz u kom se nalazi prvo direktorijumi fajla a potom fajlovi dijeli ih -1
+dir1={ (dir2 start block)4,(dir5 start block)42,(dir6 start block)14,-1,(file 1 start block)66,...}
+size===137+163
+64662 max direktorijuma
+
+Cluster
+	-byte 1bajt *   (36 864)
+
+MFT
+[	root-info   	]  [	dir1       {1} ]	[  	dir2    {1-podirektorijum} ] [  	dir3   {2} ] .. 
+][FFFFFFF]......[FFFFFFF] 	[ 	file1   	] [ 	file2 	] … [ 	file n	]  [] pocetak niza zauzetosti blokova  [] .. []   (fiksiramo velicinu mft-a na 2mb)
+………………………………………………………………………………………………………....// DATA[512bajta/blok] \\   
+	  			
+…. [].. [].. [  dir 8 ][000.x16.00]  ….garbage…. [0000.x16.00]  [ filen ]  [ file(n-1) ]  …. []..
+			|			  | 
+Provjeravamo bajtove od kraja dir-a, da bismo pronasli fleg koji oznacava kraj. 
+
+Lista funkcija: 
+ Boolean CreateFile()
+Boolean CheckSizeOfFile()
+Boolean CheckNameOfFIle() 
+Boolean isDirectoryValid(directory)
+Boolean DirectoryDepth(path)
+Void GetFile(path) 
+Void goToBlock(block)
+Void findData(string)
+Boolean isBlockFree()
+Boolean IsEnoughSpace()
+Boolean isBlockUsed()
+      -	Boolean makeDir()
+		-void Update() 
+			->void UpdateSizeofSystem()
+	     -void CreateBitMap()
+	    ////////
+	Funkcije potrebne za implementaciju, ls,mkdir.. 
+	  ////////
+Info za memorisanje: 
+Ako direktorijumi imaju podirektorijume onda cemo na njihovom zavrsetku citanja dodati signature broj koji ce oznacavati kojem direktorijumu pripadaju. Takodje ovo vazi i za fajlove koji pripadaju tom direktorijumu.
+*Razliku izmedju fajlova pravimo pomocu dubine fajla i vec postojeceg signature broja. 
+*Fajlove u mft cemo pretrazivati i na osnovu toga zakljuciti kojem fajlu pripada. 
+
+
+ Ako nesto fali samo dodavajte
+
