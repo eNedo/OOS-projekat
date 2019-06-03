@@ -7,6 +7,7 @@ File class
 			-DateLastUsed 30bajta
 			-FileSize 4bajta
 			-BitMap * 8bajta
+			-flagMemorisan u mft-u
 	
 		size==134
 Maksimalno 7825 fajlova
