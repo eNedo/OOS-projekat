@@ -163,6 +163,73 @@ Fight Bugs                      |     |
  / / / .../|  |\... \ \ \    _[__]   [__]_
 / / /       \/       \ \ \  [____>   <____]
 
+za funkcije u mainu za unos komandi sve ce primati string (path) i njega onda raskomadati tako da ce nam trebati jedna 
+univerzalna funkcija koja ce komadati string i univerzalna koja ce na osnovu imena ( komada stringa) pretrazivati mft i 
+vracati poziviju bloka u kojojom se nalazi nas fail ili sta vec i da nekako po referenci vracamo putanju po kojoj se kretala 
+dok je trazlila fail. Znam ono stace korisnik je unjeo putanju ali to da imamo kada on unese ime i kaze daj mi gdje se nalazi 
+da imamo odmah kako on trazi da usput i generise path
+tj ova funkcija koja komada ce se koristiti sa nekakvom petljom i pozivati kunfciju za trazenje koja ce primati samo jedan komad tog 
+stringa i na osnovu njega traziti nas npr prvo direktorijum citace sve dok ne naleti na njega ( prvih 30 bajtova koji ce nam predstavljati 
+ime svakog bloka i porediti sa nasim) zatim kada nadje taj blok koji odgovara tu ce se zaustaviti i onda citati elemente iz naseg niza ako
+procita prvi element 55555 ispisati da je dir prazan u suprotnom sada nam treba opet jedna univerzalna funkcija koja ce nas pomijerati po blokovima 
+unutar mft-a prima int (br iz niza) zatim gleda da li je veci od 10000 ako jeste racunaj ofset bloka jer je to onaj nas specijalac gdje se data mem u mft-u i
+da se pozicionira na taj blok zatim se poziva ona nasa funkcija za trazenje dati joj string i ona ce ponovo citati 30 bajtova i porediti ih pri tome napraviti da 
+nekako po referenci generice putanju kojom je isla do fajla u ovom primjeru znam suvisno je jer je korisnok dao ali da imamo vec gotovu to mozemo i uraditi uz pomoj jedne male 
+funkcije koja prima ime direktorijuma i dodaje ga u nas path a kada izadjemo iz naseg dira da ga ukloni to mozemo provjeravati u smislu da li je dir ako jeste da li su imena ista ako nisu da 
+li su prethobna imena ista ako jesu ukloni trenutni  ako nisu dodaj ime tog dira na kraj naseg patha
+///////
+za data segment nam nece trebati puno funkcija ( koje ce raditi sa blokovima )
+--------
+funkcija za citannje iz data segmenta treba da prima pocetni blok i koliko blokova zauzima
+radice na principu da cita kompletan blok tako sto ce na pocetku bloka za preskoci jedan bajt ili jedan bit (da BIT) (meni se vise svidja bit ali ako je lakse programirati sa bajtom i moze ali isto ce raditi)
+taj bit ce nam sluziti da kasnije znamo da li je blok slobodan ili ne ,a da pri tome ne gubimo prethobno sacuvane podatke zbog (data recovery) i na kraju imamo dva bajta koja nam govore gdje se nalazi sledeci blok od ovog bloka ili od pocetka sta je 
+lakse za programirati (da nastavi od tekuceg bloka ili da krene od pocetka isto, na pocetku ce 
+raditi brze od trenutnog ali nakon 100-200 upisa onda od pocetka ali razlika je u 17.43ms)
+citanje bloka klasicno kao iz c-a kada dodjemo do date pozicije preskoci 1bit zatim citaj sve do kraja bloka i onda uraditi odsijecanje zadnja dva bita 
+od ucitanog bloka, to se treba da memorije u jedan int ovo se moze uraditi da se razbije opet na dve funkcije funkciju za trazenje i za citanje iz bloka 
+----trazenje SearchForR/W bloka mozemo iskoristiti i za brisanje i za citanje ona treba samo da primi poziciju bloka i nista vise zatim da pomjeri pokazivac fajla ( eof ili kako se zove) na 
+tu lokaciju i da vrati da je nasao blok.
+----citanje treba da od pozicije gdje je postavljen pokazivc unutar fajla da preskoci jedan bit i onda krene ucitavati sve vrijednosti do zadnja dva bajta
+kada dodje do zadnja dva bajta ( to mozemo lako odrediti svi hederi su nam fiksne velicine 134b oduzmemo 1bit na pozetku i 16bita na kraju tj od ukupnog broja bita oduzmemo 17 i znamo koliko trebamo procitati dok ne dodjemo do 
+zadnja dva bajta koja oznacavaju sledeci blok)
+zatim se citaju i ta dva bajta pretvaraju u int ili char i prosledjuje se f-ji za trazenje 
+////-----za upis
+f-ja SetToFree()   koja pre nego sto se krene raditi sa nasim sistemom mora da prodje kroz data segment kretajuci se velicinom bloka 128B i setovati 1bit na 0 da znamo da je dati blok slobodan 
+to for petlja krece od kraja mft-a sve dok ne dodje do kraja fajla pocetak svakih 128B upisi 0 (da nam kasnije bude lakse)
+@@@----!!!trebace nam jedna globalna koja ce cuvati kraj upisa tj pokazivati na kraj data segnemta ne kompletnog data segmenta nego do kraja dokle je popunjen
+tako da kada vrsimo upis novog fajla odmah krecemo da li ga mozemo na kraj upisati u komadu ako ne onda da trazimo blokove po memoriju 
+----- f-ja za trazenje prima samo koliko blokova treba da se smjesti podata koja je slicna prethodnoj f-ji za trazenje s tim sto ova kao povratnu vrijednost treba da vrati referencu na kreirani niz od slobodnih blokova 
+starta svoje pretrazivanej od krajnjeg upisanog fajla i krece korakom velicine bloka citajuci samo prvi bit i gledajuci da li je blok slobodan ili ne ( sekvencijalno ce to ispitivati ili ako ste voljni da ubrzamo mozemo koristiti trebove koji ce odmah da za razlicitih pozicija u fajlu startati pretragu JK:) )
+ako jeste slobodan vidi da li je sledeci i sledeci itd dok ne nadje sve potrebne blokove ( ako ne bude dovoljno blokova na kraju tj ako je dosla do EOF treba da se vrati na pocetak i ponovo krene traziti)
+kada nadje sve treba da vrati referencu f-ji za upis;
+-------f-ja za upis WRITE() prima ime fajla koje korisnik zeli unjeti i prvo sto radi je da provjerava kolika je velicina fajla i koliko imamo slobodno prostora unutar naseg sistema na osnovu 
+info-a iz root-a ako imamo dovoljno velicinu fajla podijeliti na blokove 128B i pozvati f-fu za trazenje blokova (prethodnu) od te f-je dobija nazad referencu na niz brojeva koji predstavljaju blokove gdje se treba upisati i slocno kao f-a za citanje
+posto isto f-je rade mozemo iskoristiti trazenje za citanje SearchforR/W kojoj ce mo iz naseg niza dati jedan blok f-ja ce nas pozicionirati na to mejsto mi ce mo prvo setovati prvi bit na 1 a zatim krenuti upisivati fajl 128B-17bit kada to uradimo 
+u zabnja dva bajta upisemo lokaciju sledeceg bloka vracamo ce nazad ponovo pozivamo f-ju za trazenje SearchforR/W i sve kod ne dodjemo do kraja 
+u zadnji blok upisujemo -1 kao flag da znamo da smo dosli do kraja i da vise nema fajla
+-------f-ja za brisanje DELETE prima pocetni blok dajla i duzinu blokova radi tako sto ce  koristiti istu f-ju za trazenje SearchforR/W pozicionirati ce nas na blok i mi sve sto radimo jeste samo ce mo promijenuti prvi bit 
+sa 1 na nula i ocitati zadnja dva bajta koja ce mo ponovo proslijediti f-ji SearchR/W i tako sve dok ne dodjemo do kraja blokova (koliko blokova nam je fajl zauzimao)(
+ono -1 na kraju nam sluzi iz razloga da kada citamo fajl da znamo gdje je njegov kraj 
+______ za citanje fajla mozemo napraviti dodatno ubrzanje ili nama olaksanje da ako je velicina blokova veca od jedan onda tacno znamo da monamo citati 128B-17bit-a ako je 1 blok zauzet onda citati faj na nacin da ce mo prvo ucitati 15 bita na pocetku to je kada preskocimo onj 1 i onda sitati po dva bita i provjeravati da li je to -1 ili ne  i to isto raditi i 
+za zadnji blok ovo mozemo isto staviti u jednu f-ju koja ce primati ili prvi ili zadnji blok FirstLastBlock(int);
+------mozda fali jos koja f-ja ali ovo je sto ne najvaznije 
+f-ja za setovanje na nule f-ja koja ce citati,za trazenje pozicije bloka,za trazenje slobodnih blokova,za upisivanje,za brisanje 
+to su osnovne koje moraju biti 
+@@@@@@
+defragmentaciju ce mo raditi Aaaaaaaaaaaaaaaaaaaaaaaauuuuuuuuuuuuu fuck to ce biti F*** totalan F***                            -----------ZNAM -_- nema potrebe za *
+mora se ovo jos razraditi ali ovo sto pise je sva logika za data segment i ovo da se iskuca treba 4 sata ( da se iskuca!!! ne i debaguje )
+ko ima vremena nek uzme koju hoce f-ju ovdje doda ime oplesti 
+
+>>>FUNKCIJE SE RADE(radi)::
+radi 					name of funk
+
+LIPA					file systems defragmentation
+
+
+
+
+
+
 
 
 
