@@ -7,7 +7,18 @@ public class MainClass
 
     public static void main(String args[])
     {
+        checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
 
+        getUserCommand();
+
+
+
+
+
+    }
+
+    private static void getUserCommand()
+    {
         Scanner input = new Scanner(System.in);
         String takeInput = "";
 
@@ -85,24 +96,46 @@ public class MainClass
 
         }
         System.exit(0);
+    }
 
-        try
+
+    public static void checkIfOSexists()
+    {
+        File myOS = new File("./FILESYSTEM");
+        if(!myOS.exists())
         {
-            File f = new File("./FILESYSTEM");
-            FileOutputStream OUT = new FileOutputStream("./FILESYSTEM");
-            FileInputStream IN = new FileInputStream("./FILESYSTEM");
-            //            x.setLength(FILESIZE);
-            //            //if (f.exists())
-            //            firstStart(x);
-            //            //fajl nije postojao u sistemu, kreiraj novi i upisi sve potrebno
-            //
-            //            x.close();
-        } catch (FileNotFoundException e)
+            try
+            {
+                myOS.createNewFile();
+            }catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }else
         {
-        } catch (IOException f)
-        {
+            String input="";
+            do
+            {
+                System.out.println("OS already exist! Do you wanna create a new one? y/n");
+                input = (new Scanner(System.in)).nextLine();
+
+            }while(!"y".equals(input) && !"n".equals(input));
+            if("y".equals(input))
+            {
+                try
+                {
+                    myOS.delete();
+                    myOS.createNewFile();
+
+                    // TODO: treba ga popuniti novim sadrzajem
+                }catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+
+
         }
-
 
     }
 
