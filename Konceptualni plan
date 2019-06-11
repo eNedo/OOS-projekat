@@ -221,6 +221,14 @@ defragmentaciju ce mo raditi Aaaaaaaaaaaaaaaaaaaaaaaauuuuuuuuuuuuu fuck to ce bi
 mora se ovo jos razraditi ali ovo sto pise je sva logika za data segment i ovo da se iskuca treba 4 sata ( da se iskuca!!! ne i debaguje )
 ko ima vremena nek uzme koju hoce f-ju ovdje doda ime oplesti 
 
+------modifikacija f-je za brisanje u data segmentu zapravo ce sve biti isto samo sto ce umjesto da prvi bajt stavlja na nulu travljati 
+na 1 i to je to i to mozemo prodati kao ------------------------------Data recovery---------------------
+u slucaju da izbrisemo fajl i da fa zelimo vratiti samo pozovemo f-ju DataRestore i ime fajla a ona ce pozvati nasu delete koja umjesto 
+sto seta na nulu da je blok slobodan setovace na 1 da je zauzet
+kljucna rijec recover datapath ili ime fajla i to je to
+
+
+
 >>>FUNKCIJE SE RADE(radi)::
 radi 					name of funk
 
