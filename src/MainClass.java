@@ -56,15 +56,15 @@ public class MainClass
                     System.out.println("create is entered");
                     break;
 
-                case "put": // „upload“ datoteke sa postojećeg fajl sistema na novi fajl sistem,
+                case "put": // â€župloadâ€œ datoteke sa postojeÄ‡eg fajl sistema na novi fajl sistem,
                     System.out.println("put is entered");
                     break;
 
-                case "get": // „download“ datoteke sa novog fajl sistema na postojeći,
+                case "get": // â€ždownloadâ€œ datoteke sa novog fajl sistema na postojeÄ‡i,
                     System.out.println("get is entered");
                     break;
 
-                case "ls": // izlistavanje sadržaja direktorijuma na zadatoj putanji,
+                case "ls": // izlistavanje sadrÅ¾aja direktorijuma na zadatoj putanji,
                     System.out.println("ls is entered");
                     break;
 
@@ -72,7 +72,7 @@ public class MainClass
                     System.out.println("cp is entered");
                     break;
 
-                case "mv": // premještanje datoteke iz izvornog u odredišni direktorijum,
+                case "mv": // premjeÅ¡tanje datoteke iz izvornog u odrediÅ¡ni direktorijum,
                     System.out.println("mv is entered");
                     break;
 
@@ -80,19 +80,19 @@ public class MainClass
                     System.out.println("rename is entered");
                     break;
 
-                case "echo": // upis proizvoljnog tekstualnog sadržaja u datoteku,
+                case "echo": // upis proizvoljnog tekstualnog sadrÅ¾aja u datoteku,
                     System.out.println("echo is entered");
                     break;
 
-                case "cat": // prikaz sadržaja (tekstualne) datoteke,
+                case "cat": // prikaz sadrÅ¾aja (tekstualne) datoteke,
                     System.out.println("cat is entered");
                     break;
 
-                case "rm": // brisanje datoteke/direktorijuma uz mogućnost brisanja kompletnog sadržaja direktorijuma (opcija -r),
+                case "rm": // brisanje datoteke/direktorijuma uz moguÄ‡nost brisanja kompletnog sadrÅ¾aja direktorijuma (opcija -r),
                     System.out.println("rm is entered");
                     break;
 
-                case "stat": // prikaz informacija o datoteci, uključujući informacije o i-čvoru (ext4), MFT zapisu (NTFS), lokacijij svih blokova koji čine sadržaj datoteke.
+                case "stat": // prikaz informacija o datoteci, ukljuÄ�ujuÄ‡i informacije o i-Ä�voru (ext4), MFT zapisu (NTFS), lokacijij svih blokova koji Ä�ine sadrÅ¾aj datoteke.
                     System.out.println("stat is entered");
                     break;
 
@@ -113,6 +113,7 @@ public class MainClass
 
         }
         System.exit(0);
+        xlll
     }
 
 
