@@ -32,9 +32,9 @@ public class FileHeader
         try
         {
             x.seek(0);
-            x.writeChars(NameOfFileSystem);
-            x.writeChars(DateCreated);
-            x.writeInt(BlockSize);
+            x.writeChars(NameOfFileSystem);	//15
+            x.writeChars(DateCreated);		//30
+            x.writeInt(BlockSize);			//
             x.writeInt(FreeSpace);
             x.writeInt(NumberOfFiles);
             x.writeInt(NumberOfDirectoriums);
@@ -47,6 +47,14 @@ public class FileHeader
         {
         }
     }
-
+    void updateNumberOfDirectoriums(int x)
+    {
+    	this.
+    }
+    void updateNumberOfFiles(int x)
+    {
+    	
+    }
+    
 
 }
