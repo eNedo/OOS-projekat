@@ -7,6 +7,12 @@ public class Utilities
         return inputString.split(separator);
 
     }
+
+//    public boolean mkdirRegex(String input)
+//    {
+//
+//
+//    }
  
      //
 }
