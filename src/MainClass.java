@@ -3,9 +3,9 @@ import java.util.Scanner;
 
 public class MainClass
 {
-    private static long SYSTEMSIZE = 1024 * 1024 * 20;
+    private static final long SYSTEMSIZE = 1024 * 1024 * 20;
 
-    public static long ONEMB = 1024 * 1024;
+    public static final long ONEMB = 1024 * 1024;
 
 
     public static String FileSystemPath = "./FILESYSTEM";
@@ -13,16 +13,16 @@ public class MainClass
     //
     public static void main(String args[]) throws IOException
     {
-        //    checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
+            checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
 
-        getUserCommand();
+        //getUserCommand();
 
         FileHeader fileHeader = new FileHeader("MyOS");
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath, "rw"))
         {
-            //  fileHeader.writeToFile(randomAccessFile);
+            randomAccessFile.seek(ONEMB);
+            DataSegment.firstFreeSpace("test");
 
-            FileClass newFile = new FileClass("filip");
 
 
         } catch (Exception ex)
@@ -229,6 +229,8 @@ public class MainClass
                     myOS.delete();
                     myOS.createNewFile();
 
+                   // initializeFlags();  //TODO: postavi sve potrebne flagove
+
                     // TODO: treba ga popuniti novim sadrzajem
                 } catch (Exception ex)
                 {
@@ -240,6 +242,21 @@ public class MainClass
         }
 
     }
+
+    public static void initializeFlags()
+    {
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath, "rw"))
+        {
+//            randomAccessFile.seek(ONEMB);   // flag za pocetak dataSegmenta
+//            randomAccessFile.writeByte(Byte.MAX_VALUE);
+
+        }catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 
     public static void firstStart(RandomAccessFile x)
     {
