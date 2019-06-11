@@ -34,13 +34,9 @@ public class MainClass
             //  randomAccessFile.writeUTF("hello"); randomAccessFile.writeUTF("my friend");
             //  treba se pozicionirati (seek) za ''7'' mjesta da bi se ocitao string "my frined"
 
-            randomAccessFile.seek(ONEMB - FileClass.FILESIZE + 7);
-
-            System.out.println(randomAccessFile.getFilePointer());
+            //randomAccessFile.seek(ONEMB - FileClass.FILESIZE + 7);
 
 
-            String test = randomAccessFile.readUTF();
-            System.out.println(randomAccessFile.getFilePointer() + " test: " + test);
 
 
         } catch (Exception ex)

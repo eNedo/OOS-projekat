@@ -6,13 +6,13 @@ public class FileClass
 {
     public static final int FILESIZE =134;
 
-    private String NameOfFile;
     private byte FileAllocate;
     private byte isDirectory;
+    private int filesize;
+    private String NameOfFile;
     private String DateCreated;
     private String DateUpdated;
     private String DateUsed;
-    private int filesize;
 
  //
     // dodati bit mapu i funkcije
@@ -23,9 +23,7 @@ public class FileClass
     {
         try(RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath,"rw"))
         {
-            randomAccessFile.seek(MainClass.ONEMB - FILESIZE);
-            randomAccessFile.writeUTF("hello");
-            randomAccessFile.writeUTF("ma' nigga");
+
 
         }catch(Exception ex)
         {

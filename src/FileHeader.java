@@ -27,20 +27,20 @@ public class FileHeader
     }
 
 
-    public void writeToFile(RandomAccessFile x)
+    public void writeToFile(RandomAccessFile randomAccessFile)
     {
         try
         {
-            x.seek(0);
-            x.writeChars(NameOfFileSystem);	//15
-            x.writeChars(DateCreated);		//30
-            x.writeInt(BlockSize);			//
-            x.writeInt(FreeSpace);
-            x.writeInt(NumberOfFiles);
-            x.writeInt(NumberOfDirectoriums);
-            x.writeInt(MaximumSizeOfFile);
-            x.writeInt(MaximumNumberOfFiles);
-            x.writeInt(MaximumNumberOfDirs);
+            randomAccessFile.seek(0);
+            randomAccessFile.writeChars(NameOfFileSystem);	//15
+            randomAccessFile.writeChars(DateCreated);		//30
+            randomAccessFile.writeInt(BlockSize);			//
+            randomAccessFile.writeInt(FreeSpace);
+            randomAccessFile.writeInt(NumberOfFiles);
+            randomAccessFile.writeInt(NumberOfDirectoriums);
+            randomAccessFile.writeInt(MaximumSizeOfFile);
+            randomAccessFile.writeInt(MaximumNumberOfFiles);
+            randomAccessFile.writeInt(MaximumNumberOfDirs);
         } catch (Exception e)
         {
         }finally
@@ -49,7 +49,7 @@ public class FileHeader
     }
     void updateNumberOfDirectoriums(int x)
     {
-    	  //
+    	//this.
     }
     void updateNumberOfFiles(int x)
     {
