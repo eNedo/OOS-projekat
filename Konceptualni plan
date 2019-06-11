@@ -180,23 +180,32 @@ funkcije koja prima ime direktorijuma i dodaje ga u nas path a kada izadjemo iz 
 li su prethobna imena ista ako jesu ukloni trenutni  ako nisu dodaj ime tog dira na kraj naseg patha
 ///////
 za data segment nam nece trebati puno funkcija ( koje ce raditi sa blokovima )
---------
+|￣￣￣￣￣￣|
+| FROM    |
+| HERE    | 
+|         |
+| ＿＿＿＿＿| 
+(\__/) || 
+(•ㅅ•) || 
+/ 　 づ
+{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{--------
 funkcija za citannje iz data segmenta treba da prima pocetni blok i koliko blokova zauzima
 radice na principu da cita kompletan blok tako sto ce na pocetku bloka za preskoci jedan bajt ili jedan bit (da BIT) (meni se vise svidja bit ali ako je lakse programirati sa bajtom i moze ali isto ce raditi)
 taj bit ce nam sluziti da kasnije znamo da li je blok slobodan ili ne ,a da pri tome ne gubimo prethobno sacuvane podatke zbog (data recovery) i na kraju imamo dva bajta koja nam govore gdje se nalazi sledeci blok od ovog bloka ili od pocetka sta je 
 lakse za programirati (da nastavi od tekuceg bloka ili da krene od pocetka isto, na pocetku ce 
-raditi brze od trenutnog ali nakon 100-200 upisa onda od pocetka ali razlika je u 17.43ms)
+raditi brze od trenutnog ali nakon 100-200 upisa onda od pocetka ali razlika je u 17.43ms)!!!! Koristimo od bloka gdje se trenutno nalazimo i na taj blok dodamo koliko blokova imamo do sledeceg (
+mora biti u mogucnosti da se ova komanda wrti ukrug da kada dodje do kraja da se ponovo vrati na pocetak kada je EOF da se vrati na pocetak data segmenta)
 citanje bloka klasicno kao iz c-a kada dodjemo do date pozicije preskoci 1bit zatim citaj sve do kraja bloka i onda uraditi odsijecanje zadnja dva bita 
-od ucitanog bloka, to se treba da memorije u jedan int ovo se moze uraditi da se razbije opet na dve funkcije funkciju za trazenje i za citanje iz bloka 
+od ucitanog bloka, to se treba da memorise u jedan int ovo se moze uraditi da se razbije opet na dve funkcije funkciju za trazenje i za citanje iz bloka 
 ----trazenje SearchForR/W bloka mozemo iskoristiti i za brisanje i za citanje ona treba samo da primi poziciju bloka i nista vise zatim da pomjeri pokazivac fajla ( eof ili kako se zove) na 
-tu lokaciju i da vrati da je nasao blok.
+tu lokaciju i da vrati da je nasao blok (poziciju bloka u memoriji i ta pozicija koja se vraca se oduzima od prethodno memrisanog bloka i razlika se upisuje u zadnja dva bajta,ako je rjesenje negativno znaci da se vratio na pocetak ali svejedno onda se uzima apsolutna vrijednost i ona memorise).
 ----citanje treba da od pozicije gdje je postavljen pokazivc unutar fajla da preskoci jedan bit i onda krene ucitavati sve vrijednosti do zadnja dva bajta
-kada dodje do zadnja dva bajta ( to mozemo lako odrediti svi hederi su nam fiksne velicine 134b oduzmemo 1bit na pozetku i 16bita na kraju tj od ukupnog broja bita oduzmemo 17 i znamo koliko trebamo procitati dok ne dodjemo do 
+kada dodje do zadnja dva bajta ( to mozemo lako odrediti svi blokovi su nam fiksne velicine 128B oduzmemo 1bit na pozetku i 16bita na kraju tj od ukupnog broja bita oduzmemo 17 i znamo koliko trebamo procitati dok ne dodjemo do 
 zadnja dva bajta koja oznacavaju sledeci blok)
 zatim se citaju i ta dva bajta pretvaraju u int ili char i prosledjuje se f-ji za trazenje 
 ////-----za upis
 f-ja SetToFree()   koja pre nego sto se krene raditi sa nasim sistemom mora da prodje kroz data segment kretajuci se velicinom bloka 128B i setovati 1bit na 0 da znamo da je dati blok slobodan 
-to for petlja krece od kraja mft-a sve dok ne dodje do kraja fajla pocetak svakih 128B upisi 0 (da nam kasnije bude lakse)
+to for petlja krece od kraja mft-a sve dok ne dodje do kraja fajla pocetak svakih 128B upisi 0 (da nam kasnije bude lakse provjeravati da li je blok slobodan ili ne)
 @@@----!!!trebace nam jedna globalna koja ce cuvati kraj upisa tj pokazivati na kraj data segnemta ne kompletnog data segmenta nego do kraja dokle je popunjen
 tako da kada vrsimo upis novog fajla odmah krecemo da li ga mozemo na kraj upisati u komadu ako ne onda da trazimo blokove po memoriju 
 ----- f-ja za trazenje prima samo koliko blokova treba da se smjesti podata koja je slicna prethodnoj f-ji za trazenje s tim sto ova kao povratnu vrijednost treba da vrati referencu na kreirani niz od slobodnih blokova 
@@ -211,7 +220,7 @@ u zadnji blok upisujemo -1 kao flag da znamo da smo dosli do kraja i da vise nem
 -------f-ja za brisanje DELETE prima pocetni blok dajla i duzinu blokova radi tako sto ce  koristiti istu f-ju za trazenje SearchforR/W pozicionirati ce nas na blok i mi sve sto radimo jeste samo ce mo promijenuti prvi bit 
 sa 1 na nula i ocitati zadnja dva bajta koja ce mo ponovo proslijediti f-ji SearchR/W i tako sve dok ne dodjemo do kraja blokova (koliko blokova nam je fajl zauzimao)(
 ono -1 na kraju nam sluzi iz razloga da kada citamo fajl da znamo gdje je njegov kraj 
-______ za citanje fajla mozemo napraviti dodatno ubrzanje ili nama olaksanje da ako je velicina blokova veca od jedan onda tacno znamo da monamo citati 128B-17bit-a ako je 1 blok zauzet onda citati faj na nacin da ce mo prvo ucitati 15 bita na pocetku to je kada preskocimo onj 1 i onda sitati po dva bita i provjeravati da li je to -1 ili ne  i to isto raditi i 
+______ za citanje fajla mozemo napraviti dodatno ubrzanje ili nama olaksanje da ako je velicina blokova veca od jedan onda tacno znamo da moramo citati 128B-17bit-a ako je 1 blok zauzet onda citati faj na nacin da ce mo prvo ucitati 15 bita na pocetku to je kada preskocimo onj 1 i onda citati po dva bajta i provjeravati da li je to -1 ili ne  i to isto raditi i 
 za zadnji blok ovo mozemo isto staviti u jednu f-ju koja ce primati ili prvi ili zadnji blok FirstLastBlock(int);
 ------mozda fali jos koja f-ja ali ovo je sto ne najvaznije 
 f-ja za setovanje na nule f-ja koja ce citati,za trazenje pozicije bloka,za trazenje slobodnih blokova,za upisivanje,za brisanje 
@@ -226,14 +235,6 @@ na 1 i to je to i to mozemo prodati kao ------------------------------Data recov
 u slucaju da izbrisemo fajl i da fa zelimo vratiti samo pozovemo f-ju DataRestore i ime fajla a ona ce pozvati nasu delete koja umjesto 
 sto seta na nulu da je blok slobodan setovace na 1 da je zauzet
 kljucna rijec recover datapath ili ime fajla i to je to
-
-
-
->>>FUNKCIJE SE RADE(radi)::
-radi 					name of funk
-
-LIPA					file systems defragmentation
-
 
 
 
