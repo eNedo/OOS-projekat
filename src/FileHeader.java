@@ -1,9 +1,9 @@
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class FILEHeader
+public class FileHeader
 {
     private String NameOfFileSystem;
     private String DateCreated;
@@ -15,7 +15,7 @@ public class FILEHeader
     private static final int MaximumNumberOfFiles = 7653;
     private static final int BlockSize = 256;
 
-    public FILEHeader(String name)
+    public FileHeader(String name)
     {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss z");
         NameOfFileSystem = name;
@@ -26,7 +26,8 @@ public class FILEHeader
         FreeSpace = 19922944;
     }
 
-    public void write(RandomAccessFile x)
+
+    public void writeToFile(RandomAccessFile x)
     {
         try
         {
@@ -44,4 +45,6 @@ public class FILEHeader
         {
         }
     }
+
+
 }

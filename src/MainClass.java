@@ -1,17 +1,28 @@
 import java.io.*;
+import java.util.Random;
 import java.util.Scanner;
 
 public class MainClass
 {
     private static long FILESIZE = 1024 * 1024 * 20;
+    public static String FileSystemPath= "./FILESYSTEM";
 
-    public static void main(String args[])
+    public static void main(String args[]) throws IOException
     {
         checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
 
         getUserCommand();
 
+        FileHeader fileHeader=new FileHeader("MyOS");
+        try(RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath,"rw"))
+        {
+            fileHeader.writeToFile(randomAccessFile);
 
+
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
 
 
@@ -102,6 +113,7 @@ public class MainClass
     public static void checkIfOSexists()
     {
         File myOS = new File("./FILESYSTEM");
+
         if(!myOS.exists())
         {
             try
@@ -152,7 +164,7 @@ public class MainClass
         while (name.length() <= 15)
             name += " ";
 
-        FILEHeader p = new FILEHeader(name);
-        p.write(x);
+        FileHeader p = new FileHeader(name);
+        p.writeToFile(x);
     }
 }
