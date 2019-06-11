@@ -5,18 +5,24 @@ import java.util.Scanner;
 public class MainClass
 {
     private static long FILESIZE = 1024 * 1024 * 20;
-    public static String FileSystemPath= "./FILESYSTEM";
+
+    public static long ONEMB= 1024*1024;
+
+
+    public static String FileSystemPath= "./FILESYSTEM.txt";
 
     public static void main(String args[]) throws IOException
     {
         checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
 
-        getUserCommand();
+       // getUserCommand();
 
         FileHeader fileHeader=new FileHeader("MyOS");
         try(RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath,"rw"))
         {
             fileHeader.writeToFile(randomAccessFile);
+
+            FileClass newFile = new FileClass("filip");
 
 
         }catch(Exception ex)
@@ -112,7 +118,7 @@ public class MainClass
 
     public static void checkIfOSexists()
     {
-        File myOS = new File("./FILESYSTEM");
+        File myOS = new File(FileSystemPath);
 
         if(!myOS.exists())
         {
@@ -159,8 +165,8 @@ public class MainClass
         {
             System.out.println("Unesite ime novog fajl sistema!");
             name = s.nextLine();
-        }
-        while (name.length() > 15);
+        }while (name.length() > 15);
+
         while (name.length() <= 15)
             name += " ";
 

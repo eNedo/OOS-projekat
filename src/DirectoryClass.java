@@ -1,4 +1,5 @@
-
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class DirectoryClass
 {
@@ -14,4 +15,11 @@ public class DirectoryClass
     // block?
     private byte signature[] = new byte[64];
     // funkcije..
+
+
+    public void flagAfterDirectory(RandomAccessFile randomAccessFile) throws IOException
+    {
+        randomAccessFile.writeChars("FFFFFFFF");
+
+    }
 }

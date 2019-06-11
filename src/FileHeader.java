@@ -17,7 +17,7 @@ public class FileHeader
 
     public FileHeader(String name)
     {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss z");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss");
         NameOfFileSystem = name;
         Date date = new Date(System.currentTimeMillis());
         DateCreated = formatter.format(date);
@@ -42,6 +42,8 @@ public class FileHeader
             x.writeInt(MaximumNumberOfFiles);
             x.writeInt(MaximumNumberOfDirs);
         } catch (Exception e)
+        {
+        }finally
         {
         }
     }
