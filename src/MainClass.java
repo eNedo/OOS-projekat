@@ -9,7 +9,7 @@ public class MainClass
     public static long ONEMB= 1024*1024;
 
 
-    public static String FileSystemPath= "./FILESYSTEM.txt";
+    public static String FileSystemPath= "./FILESYSTEM";
 
     public static void main(String args[]) throws IOException
     {
@@ -113,7 +113,7 @@ public class MainClass
 
         }
         System.exit(0);
-        xlll
+         
     }
 
 
