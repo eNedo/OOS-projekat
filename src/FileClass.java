@@ -24,7 +24,8 @@ public class FileClass
         try(RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath,"rw"))
         {
             randomAccessFile.seek(MainClass.ONEMB - FILESIZE);
-            randomAccessFile.writeChars("hello");
+            randomAccessFile.writeUTF("hello");
+            randomAccessFile.writeUTF("ma' nigga");
 
         }catch(Exception ex)
         {

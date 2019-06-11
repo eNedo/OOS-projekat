@@ -1,35 +1,52 @@
 import java.io.*;
-import java.util.Random;
 import java.util.Scanner;
 
 public class MainClass
 {
-    private static long FILESIZE = 1024 * 1024 * 20;
+    private static long SYSTEMSIZE = 1024 * 1024 * 20;
 
-    public static long ONEMB= 1024*1024;
+    public static long ONEMB = 1024 * 1024;
 
 
-    public static String FileSystemPath= "./FILESYSTEM";
+    public static String FileSystemPath = "./FILESYSTEM";
 
     public static void main(String args[]) throws IOException
     {
-        checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
+        //    checkIfOSexists();  // provjeri da li OS vec postoji sacuvan
 
-       // getUserCommand();
+        // getUserCommand();
 
-        FileHeader fileHeader=new FileHeader("MyOS");
-        try(RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath,"rw"))
+        FileHeader fileHeader = new FileHeader("MyOS");
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath, "rw"))
         {
-            fileHeader.writeToFile(randomAccessFile);
+            //  fileHeader.writeToFile(randomAccessFile);
 
             FileClass newFile = new FileClass("filip");
 
 
-        }catch(Exception ex)
+        } catch (Exception ex)
         {
             ex.printStackTrace();
         }
 
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(FileSystemPath, "rw"))
+        {
+            //  randomAccessFile.writeUTF("hello"); randomAccessFile.writeUTF("my friend");
+            //  treba se pozicionirati (seek) za ''7'' mjesta da bi se ocitao string "my frined"
+
+            randomAccessFile.seek(ONEMB - FileClass.FILESIZE + 7);
+
+            System.out.println(randomAccessFile.getFilePointer());
+
+
+            String test = randomAccessFile.readUTF();
+            System.out.println(randomAccessFile.getFilePointer() + " test: " + test);
+
+
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
 
     }
@@ -113,7 +130,7 @@ public class MainClass
 
         }
         System.exit(0);
-         
+
     }
 
 
@@ -121,25 +138,25 @@ public class MainClass
     {
         File myOS = new File(FileSystemPath);
 
-        if(!myOS.exists())
+        if (!myOS.exists())
         {
             try
             {
                 myOS.createNewFile();
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 ex.printStackTrace();
             }
-        }else
+        } else
         {
-            String input="";
+            String input = "";
             do
             {
                 System.out.println("OS already exist! Do you wanna create a new one? y/n");
                 input = (new Scanner(System.in)).nextLine();
 
-            }while(!"y".equals(input) && !"n".equals(input));
-            if("y".equals(input))
+            } while (!"y".equals(input) && !"n".equals(input));
+            if ("y".equals(input))
             {
                 try
                 {
@@ -147,7 +164,7 @@ public class MainClass
                     myOS.createNewFile();
 
                     // TODO: treba ga popuniti novim sadrzajem
-                }catch (Exception ex)
+                } catch (Exception ex)
                 {
                     ex.printStackTrace();
                 }
@@ -166,7 +183,7 @@ public class MainClass
         {
             System.out.println("Unesite ime novog fajl sistema!");
             name = s.nextLine();
-        }while (name.length() > 15);
+        } while (name.length() > 15);
 
         while (name.length() <= 15)
             name += " ";

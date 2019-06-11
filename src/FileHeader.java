@@ -49,7 +49,7 @@ public class FileHeader
     }
     void updateNumberOfDirectoriums(int x)
     {
-    	this.
+    	//this.
     }
     void updateNumberOfFiles(int x)
     {
