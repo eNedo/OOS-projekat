@@ -236,6 +236,118 @@ u slucaju da izbrisemo fajl i da fa zelimo vratiti samo pozovemo f-ju DataRestor
 sto seta na nulu da je blok slobodan setovace na 1 da je zauzet
 kljucna rijec recover datapath ili ime fajla i to je to
 
+MFT_-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+pocetak mtf bloka ca sacinavato root blok u kom ce biti smjestene sve informacije vezane za fajl sistem slobodan prostor koliko je zauzeto ime fajl sistema verzija,tip arhitekture koji koristi sistem 
+datum update koliko se moze maksimalno kreirati direktorijuma ,maksimalno fajlova ,koliko je fajlova trenutno na sistemu ,koliko je direktorijuma trenutno na sistemu 
+plus    -Name 30bajta
+	-isDirectory 1bajta
+	-createdDate 30bajta
+	-LastUsed 30bajta
+	-lastModified 30bajta
+	-fileAlocateFlag 1bajta
+	-ResFlag 1bajta
+	-SystemSize 4bajta
+	-DirectoryArray * subdirectory 256bajta
+	-FreeSpace 4bajta
+	-FreeBlocks 4bajta
+	-ClusterSize 4bajta
+nakontoga dolaze nasi standardni blokovi (direktorijumi) 
+	-Name 30bajta
+	-isDirectory 1bajta
+	-createdDate 30bajta
+	-LastUsed 30bajta
+	-lastModified 30bajta
+	-fileAlocateFlag 1bajta
+	-ResFlag 1bajt
+	-Block 8bajta
+	-Size 4bajta
+	-Depth 1bajta
+	-freeMft_space
+	-promjenljiva u kojoj memorisemo koliko fajlova ili direktorijuma mozemo smjestiti 1B
+	-promjenljiva koja nam govori koliko vec imamo 1B
+i niz od 81 elementa u koji se memorisu blokovi fajlova i poddirektorijuma unutar mft-a 
+f-ja za kreiranje direktorijuma radice na tom principu da ce primati string (path) od strane korisnika i pozvati 
+f-ju za parcanje stringa ta funkcija vraca komad stringa od pocetka do / i vraca taj komad stringa 
+zatim ce se pozvati f-ja za trazenje koja ce nas pozicionirati na mjesto gdje se nalazi direktorinum zatim se poziva ponovo f-ja za komadanje stringa i koja ce nam dati ime pod direktorijuma ili ime nowog direktorijuma ako je 
+poddirektorijum onda se ponavlja prethodno a a ko je nowi onda ce se pozvati f-ja create(i dati jej ime direktorijuma-novog)
+ta f-ja ce kreirati dir i vratiti ispis da je sve uspjesno odradjeno.
+f-ju za parzanje strinja( patha) prima string po referenci zatim u privremeni string stavlja karaktere sve do / 
+uklanja / i vraca taj privremeni string 
+ova funkcija ce se pozivati od strane f-je za upis (kreiranje dira) kada se dobije nazad komad stringa od f-je za rasparcavanje taj string se salje f-ji za pretrazivanje 
+f-ja za trazenje SearchBlock koja ce na osnovu niza u trenutnom direktoijumu ici i na zadati blok i provjeravati da li se ime tog bloka poklapa sa nasim ako ne vracaj nazad i provjeravaj za drugi ako ne nadje ni jedan sto odgovara onda ispisuje error a ako nadje 
+pomjeri nas u taj blok(pozicionira) zatim se nazad vraca u f-ju za upis i ponovi se poziva f-ja za rasparcavanje stringa i f-ja trazi...
+kada dodjemo do kraja te nase putanje poslednji komad stringa je nas novi direktipijum s tim pre nego sto ga kreiramo moramo da provjerima da li u trenutnom direktirijumu slicajno ima dir sa ovakvim imenom tako da ce mo ponovo pozvati f-ju za trazenje i provjeriti da li nemamo istoimeni dir ako imamo error ako ne onda pozvati f-ju 
+za kreiranje Mkdir() kojoj se mo dati ime dira a vracace nam blok gdje je upisan
+Mkdir f-ja ce prvo pozvati f-ju za trazenje slododnog bloka (ovdje necemo ici s tim da krecemo upis odma od kraja jer nam je cilj da sve popunjavamo a da kraj sto je moguce manje pomijeramo 
+za ovo trazenje ce mo koristiti f-ju iz data segmenta za trazenje sa modifikacijom da nece traziti korakom 128B vec velicinom dira i radice isto prvi bit naseg dira ce sacinjavati dit isAlocated i samo njega ce mo citati i gledati da li je dir slobodan ili ne 
+isto vraca poziciju bloka ta pozicija se vraca i mkdir f-ju ona u niz (na kraj upisanih elemenata dodava broj bloka ) i onda se pozicioniramo na mjesto tog bloka 
+prvo i vrsi se upis podaraka prvi isAlocated zatim ime i onda ostalo sto sljeduje, kreira se nas niz i svi elementi niza se stavljaju na 50000 to ce nam sluziti kao flag da znamo dokle je niz popunjen 
+ update sve sto treba (velicina posto je prazan 0 mah broj fajlova....
+za upis fajla ce se iskoristiti neke f-je iz upisa direktorijuma f-ja za trazenje,f-ja za rasparcavanje...
+---insertFile() prima path i kao za dir sve se isto radi s tim da se fajl trazi tako sto se od 1MB oduzima velicina bloka fajla 
+ali dolazak do direktorijuma u koji se treba smjestiti fajl je isti kao za makedir.Kada nadjemo direktorijum u koji trebamo smjestiti fail prvo sto radimo je provjeravamo da li slucajno nemamo fail sa istim imenom tako sto ce mo 
+pozvati f-ju checkFIle() dati joj ime fajla i pustiti je da u nizu provjeri da li postoji fail sa ovakvim imenom na nacin sto ce gledati samo negativne brojeve unutar niza (oni ce ocnacavati fajlove uzimati njihovu apsolutnu vrijednost pozicionirati se na mjesto bloka gdje se nalazi 
+i pcitati 30B za ima (prvi bit se preskace on govori da li se fajl koristi ili ne ( isAlocated);
+i pri tome provjeravati da slucajno memamo kajl koji je veci od 10000 ako jeste onda od tog broja oduzmi 10000 i ostatak je mjesto bloka (to su fajlovi memorisani u mft)
+citaju se isto kako i do sada prvi bit preskace cita 30B itd... Ako je sve proslo kako treba onda ce poziva f-ja za kreiranje fajla
+CreateFile(koja prima samo ime fajla) ona poziva f-ju za trazenje slobodnog bloka SearchForFIle koja radi isto kao f-ja koja trazi slobodan blok u mft-u samo sto korak kako prelazi na sledeci blok je inverzan tj od 1MB oduzimamo heder fajla i tako se pomijeramo po blokovima)
+kada nadjemo blok vratimo poziciju bloka i upisujemo kao kod dira prvi bit 1 da se zna da se koristi zatim ime i onda sve sto sleduje 
+) ne zaboraviti da se prvo treba upisati u niz dira pre nego sto se ode u blok od hedera 
+velicina novokreiranog fajla je 0 
+
+RJESENJE ZA PRETRAGU SA fajlovima memorisanim u mft je da u hederu fajla imamo dva bita prvi bit kovori da li je fajl slobodan ili ne a drugi bit govori o kakvom tipu fajla je jijec u fail hederu ako je 1 onda je to fajl sa mft memorijom i citaj ga na poseban nacin tj da kada se bude vrsila pretraga i naidje na ovakav fajl i procita da je 1 onda da naredni korak ne ide velicinom hajl hedera vec da na taj blok doda velivinu fajla plus blok memorije koji dolazi sa njim 
+ovo je za pretrazivanje sekvencijalno i provjeravanje da li je fajl slobodan ili ne a da pri tome ne citamo direktorijume i slicno 
+
+---za upis ili dodavanje novog fajla  
+novi fajl dodavamo pozivajuci f-ju AddFIle(lokacija gdje se memorije i ime (ime je na kraju patha)))
+koristimo sve f-je koje su prethodno definisane za trazenje fajla i kreiranje (kreiramo novi fajl upisemo sadrzaj onog fajla koga zelimo premjestiti i  onda izbrisemo taj fajl)
+ali pre nego sto krenemo to raditi moramo obezbijediti:
+provjera da li imamo dovoljno prostora da se smjesti fajl (uporediti slobodan prostor i velicinu fajla),
+zatim izracunati koliko blokova treba da se smjesti fajl velicina fajla : (128B-17bita)
+to memorisemo u heder fajla i pozivamo f-ju za upis u data segment i saljemo joj koliko nam blokova treba i ime fajla kog upisujemo f-ja vraca prvi blok 
+i on se memorise u pocetak memorije fajla u data segmentu 
+!!!INFO naci kako se brise na glavnom sistemu tj na drugom sistemu prilikom prebacivanja na nas;
+----za brisanje fajla poziva se funkcija DELETEFILE(prima se putanja) zatim se prazi fajl za isti nacin kao i za dodavanje novog fajla s tim sto kada nadjemo lokaciju fajla samo promijenimo isAlocated bit na 0 i pozovemo f-ju za brisanje u data segmentu i saljemo joj samo pocetni blok i koliko blokova je digacak 
+nas fajl (koliko zauzima blokova) Aktualizirati u mft-u slobodan prostor i zauzet prostor isto tako i u root-u 
+ovo radimo da mozemo odmah na pozetku uraditi osnovne provjere i slicno 
+--- kopiranje fajla f-ja copyFile(ime novi path ili dva parha prima ) sto znaci da ce mo opet koristiti iste f-je kao za upis fajla da pronadjemo lokaciju fajla s tim da samo u privremenu promjenljivu memorisemo blok u hederu koji se nalazi u nizu i onda u zinu na to mjesto stavimo onaj flag da je taj element u nizu slobodan 
+i onda otici na drugu lokaciju gdje se treba kopitari i ubaciti u niz od tog dira vrijednos nase privremene 
+---f-ja za recoveruData(prima ime ili path od podatka)i onda se pretrazuju slobodni blokovi i za ovo mozemo opet iskoristiti f-ju za trazenje slobodnih blokova u hederu sa modifikacijom da ce dodatno vrsiti citanje imena i provjeravanje da li ime odgovara nasem trazenom 
+ako smo nasli pozicionirati se na blok (jos ne stavljati isAlocated na 1) prvo provjeriti da li je podatak u komadu a i za to ce pozvati f-ju recover koja ce pozvati f-ju iz data dijela Recover() primice pocetni blok i duzinu i obrnuto ce pozvati f-ju za brisanje ali na dva nacina prvo ce procitati sve blokove tj jednom ce proci samo da vidi da li postoji putanja tj da li su svi blokovi na nuli i da se zavrsava nakon koliko blokova treba da se zavrsava ako je to ispunjeno onda se ponovo poziva ta ista f-ja stim sto sada stavlja sve prve bitove na 1 i vraca kao povratnu vrijednost 0 kao uspjesno rekonstruisano i onda 
+u hederu prvi bit stavljamo na 1 i ispisemo da je fajl uspjesno rekonstruisan 
+----editovanje fajla to je se raditi tako sto ce se napraviti privremeni fajl u memoriji pozvati f-ja za citanje fajla i u privremeni fajl upisati nas fajl 
+nakon editivanja fajla prvo provjeriti da li nova velicina fajla moze stati u nase blokove ako odgovara velicini blokova 
+tj ako je velicina fajla <=velicina bloka *(128B-17bajta) onda direktno pozvati f-ju za upis u data segment dati joj pocetni fajl i ime fajla kog upisujemo ;
+ako je nas fajl manji od onoga sto je bio u memoriji onda pozivamo f-ju delete da fajl koji je u memoriji (nasoj) i onda pozivamo f-ju za upis i davamo joj pocetni blok bivseg fajla i ime fajla i pocinjemo od lokacije bibseg fajla 
+i upisujemo modifikovani fajl 
+NOTE ovo se mora raditi jer ako ne onda postoji sansa da se male promjene u fajlu izgube sto je problem kod slika i vodeo zapisa 
+
+sve ostale f-je su trivijalne osim get f-je 
+koja sa naseg sistema prebacuje na racunar kako traziti fajl po sistemu java treba da ima gotove f-je koje mozemo koristiti da kreiramo fajl na racunaru i iz nasef fajla upisemo u taj fajl 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+VAZNO flagove sve u hederima reducirani su na velicinu od 1bita iz razloga zaurimaju manje memorije a i blokovi su fiksni i tazno znamo kako koji flag dolazi kojim redom 
+tako da ovim smanjijemo velicine hedera dira i fajlova 
+
+Sve sto je tipa thrue false prestavljati preko 1 bita neko nek bude dobar i izracuna koliko zauzimaju 
+Ovo je lakse posto se mo raditi samo manipulacije na fajlovima i necemo ulaziti previse u prograiranje u smislu da ce mo traziti promjenljive i vrsiti konverzije sto je 
+malko gore u smislu ima vise posla a ovo je isto dobro rjesenje ali sa manje posla 
+data segment se nista ne mijenja ostaje kako je definisamo 
+
+
+
+jos defragmentacija jebeno puzlanje 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+==================================================================================================================================================================================================
+
+
+
+
+
+
+
+
 
 
 
