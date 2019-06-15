@@ -31,6 +31,7 @@ public class FileHeader
     {
         try
         { 
+             if (isMFTfile==1)  x.write(DataBlock); //64 
             x.seek(position);
             x.writeByte(isAllocated);       //2
             x.writeByte(isMFTfile); 
@@ -41,111 +42,112 @@ public class FileHeader
             x.writeUTF(DateCreated);     //24
             x.writeUTF(DateLastUsed);    //24
             x.writeUTF(DateLastModified);//24
-             if (isMFTfile==1)  x.write(DataBlock);
         } catch (Exception e)
         {
         }
     }
     public void getDataFromFile(RandomAccessFile x, byte[] temp)
     { 
-    x.seek(x.getFilePointer()+106);
     x.read(temp); 
-    x.seek(x.getFilePointer()-170);
+    x.seek(x.getFilePointer()-64);
     } 
     
   public void setNameOfFile(RandomAccessFile x, String name) throws IOException
   {
-      x.seek(x.getFilePointer()+2); 
+      x.seek(x.getFilePointer()+66); 
         x.writeUTF(name); 
-       x.seek(x.getFilePointer()-22); 
+       x.seek(x.getFilePointer()-86); 
   }
  public String getNameOfFile(RandomAccessFile x) throws IOException
  {
-     x.seek(x.getFilePointer()+2); 
+     x.seek(x.getFilePointer()+66); 
      String temp=x.readUTF(); 
-     x.seek(x.getFilePointer()-22); 
+     x.seek(x.getFilePointer()-86); 
      return temp; 
  }
     public void setsize(RandomAccessFile x, int SIZE) throws IOException
     {
-        x.seek(x.getFilePointer() + 22); 
+        x.seek(x.getFilePointer() + 86); 
         x.writeInt(SIZE); 
-        x.seek(x.getFilePointer()-26); 
+        x.seek(x.getFilePointer()-90); 
     }
     public int getSize(RandomAccessFile x) throws IOException
     { 
-        x.seek(x.getFilePointer() + 22);
+        x.seek(x.getFilePointer() + 86);
         int temp=x.readInt(); 
-        x.seek(x.getFilePointer()-26); 
+        x.seek(x.getFilePointer()-90); 
         return temp; 
     }
 public void setFileFreeForWrite(RandomAccessFile x, byte l) throws IOException
   {
+      x.seek(x.getFilePointer()+64);
         x.writeByte(l); 
-        x.seek(x.getFilePointer()-1); 
+        x.seek(x.getFilePointer()-65); 
   }
   public void setisMFTFILE(RandomAccessFile x,byte l) throws IOException
   {
-      x.seek(x.getFilePointer()+1); 
+      x.seek(x.getFilePointer()+65); 
        x.writeByte(l);
-      x.seek(x.getFilePointer()-2); 
+      x.seek(x.getFilePointer()-66); 
   }
   
   public byte isFileFreeForWrite(RandomAccessFile x) throws IOException
   {
-        return x.read(); 
+      x.seek(x.getFilePointer()+64); 
+        byte temp= x.read(); 
+        x.seek(x.getFilePointer()-65); 
+        return temp; 
   }
   public byte getisMFTFILE(RandomAccessFile x) throws IOException
   {
-      x.seek(x.getFilePointer()+1); 
+      x.seek(x.getFilePointer()+65); 
       byte temp=x.read();
-      x.seek(x.getFilePointer()-2); 
+      x.seek(x.getFilePointer()-66); 
       return temp; 
   }
   public String getDateLastModified(RandomAccessFile x) throws IOException 
   {
       
-      x.seek(x.getFilePointer()+82); 
+      x.seek(x.getFilePointer()+146); 
       String temp=x.readUTF();
-      x.seek(x.getFilePointer()-106); 
+      x.seek(x.getFilePointer()-170); 
       return temp;
   }
   public String getDateLastUsed(RandomAccessFile x) throws IOException
   {
  
-      x.seek(x.getFilePointer()+58); 
+      x.seek(x.getFilePointer()+122); 
       String temp=x.readUTF();
-      x.seek(x.getFilePointer()-82); 
+      x.seek(x.getFilePointer()-146); 
       return temp;
    }
   public String getDateCreated(RandomAccessFile x) throws IOException
   {
       
-      x.seek(x.getFilePointer()+34); 
+      x.seek(x.getFilePointer()+98); 
       String temp=x.readUTF();
-      x.seek(x.getFilePointer()-58); 
+      x.seek(x.getFilePointer()-122); 
       return temp;
   }
   
   public void setDateLastModified(RandomAccessFile x,String date) throws IOException 
   {
       
-      x.seek(x.getFilePointer()+82); 
+      x.seek(x.getFilePointer()+146); 
       x.writeUTF(date); 
-      x.seek(x.getFilePointer()-106); 
+      x.seek(x.getFilePointer()-170); 
   }
   public void  setDateLastUsed(RandomAccessFile x,String date) throws IOException
   {
  
-      x.seek(x.getFilePointer()+58); 
+      x.seek(x.getFilePointer()+122); 
       x.writeUTF(date);
-      x.seek(x.getFilePointer()-82); 
+      x.seek(x.getFilePointer()-146); 
    }
   public void setDateCreated(RandomAccessFile x, String date) throws IOException
   {
       
-      x.seek(x.getFilePointer()+34); 
+      x.seek(x.getFilePointer()+98); 
       x.writeUTF(date);
-      x.seek(x.getFilePointer()-58); 
+      x.seek(x.getFilePointer()-122); 
   }
-  
