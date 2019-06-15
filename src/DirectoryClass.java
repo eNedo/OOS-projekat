@@ -15,7 +15,8 @@ public class DirectoryClass
     private String dateUsed;			//42+24=68
     private String dateModified;		//68+24=92
     private int size;					//92+4
-	private Vector<Short> arrayOfDirs = new Vector(81);
+//	private Vector<Short> arrayOfDirs = new Vector(81);
+	private short[] arrayOfDirs; // vrijednost 55555 ako prazan element
 
     public DirectoryClass(String name, byte Depth)
     {
@@ -25,6 +26,10 @@ public class DirectoryClass
         dateModified=dateUsed=dateCreated = formatter.format(date);
     	nameOfDirectory =name;
     	depthFlag =Depth;
+    	arrayOfDirs= new short[81];
+    	for(int i=0; i<arrayOfDirs.length; i++)
+    	    arrayOfDirs[i]=(short)55555;
+
     	this.size=0;
 
     }
@@ -141,16 +146,67 @@ public class DirectoryClass
 		randomAccessFile.writeInt(size);
 		randomAccessFile.seek(randomAccessFile.getFilePointer()-96);
 	}
+	public short[] getArrayOfDirs(RandomAccessFile randomAccessFile) throws IOException
+	{
+		short[] readArray = new short[81];
+		randomAccessFile.seek(randomAccessFile.getFilePointer()+96);
+		for(int i=0; i<readArray.length; i++)
+		{
+		    readArray[i]=randomAccessFile.readByte();
+		}
+		randomAccessFile.seek(randomAccessFile.getFilePointer()-DIRHEADERSIZE);
+		return readArray;
+	}
 
-    public void writedir(RandomAccessFile x, FileHeader fh)
-    { 
-    	try { 
-    	x.seek(0); 
-    	x.seek(102); 
-    	if (fh.NumOfDirs(x)!=1)    
+	public void setNewDirectory(RandomAccessFile randomAccessFile, short blockNumber) throws IOException
+	{
+		long currentPosition = randomAccessFile.getFilePointer();
+		randomAccessFile.seek(randomAccessFile.getFilePointer()+96);
+
+		boolean flag = false;
+		for(int i=0; i<arrayOfDirs.length; i++)
+		{
+			short tmp;
+			tmp=randomAccessFile.readShort();
+			if(tmp==(short)55_555)
+			{
+				flag=true;
+				randomAccessFile.seek(randomAccessFile.getFilePointer()-2);
+				randomAccessFile.writeShort(blockNumber);
+				break;
+			}
+		}
+		if(!flag)
+		{
+			System.out.println("no space for new Direcotry");
+		}
+		randomAccessFile.seek(currentPosition);
+	}
+
+	public void writeDirInFile(RandomAccessFile randomAccessFile) throws IOException
+	{
+		randomAccessFile.writeByte(this.isAllocatedFlag);
+		randomAccessFile.writeUTF(this.nameOfDirectory);
+		randomAccessFile.writeByte(this.depthFlag);
+		randomAccessFile.writeUTF(this.dateCreated);
+		randomAccessFile.writeUTF(this.dateUsed);
+		randomAccessFile.writeUTF(this.dateModified);
+		randomAccessFile.writeInt(this.size);
+		for(int i=0; i<arrayOfDirs.length; i++)
+		    randomAccessFile.writeShort(arrayOfDirs[i]);
+
+		randomAccessFile.seek(randomAccessFile.getFilePointer()-DIRHEADERSIZE);
+	}
+
+	public void writedir(RandomAccessFile x, FileHeader fh)
+    {
+    	try {
+    	x.seek(0);
+    	x.seek(102);
+    	if (fh.NumOfDirs(x)!=1)
     	{
-    		for (int i=fh.NumOfDirs(x); i>0; i--) 
-    	x.seek(x.getFilePointer()+168); 
+    		for (int i=fh.NumOfDirs(x); i>0; i--)
+    	x.seek(x.getFilePointer()+168);
     	}
   		     	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss");
   		        Date date = new Date(System.currentTimeMillis());
@@ -167,8 +223,8 @@ public class DirectoryClass
   		       x.write(depthFlag);
   		       x.write(isAllocatedFlag);
   		       x.writeInt(size);
- 		} 
-    	catch (Exception e) {} 
+ 		}
+    	catch (Exception e) {}
     }
 }
 
