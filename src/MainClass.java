@@ -269,19 +269,22 @@ public class MainClass
      }
 }
 
-public static long getFileHeaderFreeBlock(RandomAccessFile x) throws IOException        //TODO
+public static long getFileHeaderFreeBlock(RandomAccessFile x,RootHeader rh) throws IOException        //TODO
 { 
     x.seek(ONEMB-106); 
+    int count=0;
+    byte x1,x2;
     do { 
-    if (x.read()==1) return x.getFilePointer();         //slobodno za alokaciju 
+        x1=x.read(); //slobodno za alokaciju
+        x2=x.read(); //mft
+    if (x1==0 && x2==1) return x.getFilePointer()-64-106;         //slobodno za alokaciju 
     else {
-                if(x.read()==1)                                    //mft fajl 
-                                x.seek(x.getFilePointer-64); 
-    
-        }
+        count++; 
+                if(x1==1 && x2==0)   x.seek(x.getFilePointer()-106); 
+        } 
         x.seek(x.getFilePointer-106);
     }
-    while (true); 
+    while ((rh.getSizeOfMFTDirs -170*count) >170); 
 }
 
 public static long getFileHeaderPosition(RandomAccessFile x) throws IOException
