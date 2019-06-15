@@ -46,6 +46,13 @@ public class FileHeader
         {
         }
     }
+    public void getDataFromFile(RandomAccessFile x, byte[] temp)
+    { 
+    x.seek(x.getFilePointer()+106);
+    x.read(temp); 
+    x.seek(x.getFilePointer()-170);
+    } 
+    
   public void setNameOfFile(RandomAccessFile x, String name) throws IOException
   {
       x.seek(x.getFilePointer()+2); 
