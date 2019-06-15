@@ -294,6 +294,8 @@ if ((numberofMFTheaders+numberofMFTfiles)==rh.getNumberOfMFTheaders())
 								return x.getFilePointer()-2;
 										}
     }
+        return -1; 
+
 }
 }
  
