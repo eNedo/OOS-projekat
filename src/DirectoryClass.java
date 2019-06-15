@@ -198,33 +198,5 @@ public class DirectoryClass
 		randomAccessFile.seek(randomAccessFile.getFilePointer()-DIRHEADERSIZE);
 	}
 
-	public void writedir(RandomAccessFile x, FileHeader fh)
-    {
-    	try {
-    	x.seek(0);
-    	x.seek(102);
-    	if (fh.NumOfDirs(x)!=1)
-    	{
-    		for (int i=fh.NumOfDirs(x); i>0; i--)
-    	x.seek(x.getFilePointer()+168);
-    	}
-  		     	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss");
-  		        Date date = new Date(System.currentTimeMillis());
- 		        dateCreated = formatter.format(date);
- 		        dateUsed =formatter.format(date);
- 		        dateModified =formatter.format(date);
-  		       for(; nameOfDirectory.length()<15; )
- 		       nameOfDirectory = nameOfDirectory +" ";
-  		       x.writeChars(nameOfDirectory);
-  		       x.writeChars(dateUsed);
-  		       System.out.println("xxxx");
-  		       x.writeChars(dateCreated);
-  		       x.writeChars(dateModified);
-  		       x.write(depthFlag);
-  		       x.write(isAllocatedFlag);
-  		       x.writeInt(size);
- 		}
-    	catch (Exception e) {}
-    }
 }
 

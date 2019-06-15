@@ -8,7 +8,7 @@ public class RootHeader
 {
     //16+24*3+4*12+81*2 = 350
     public static final int ROOTHEADERSIZE = 350;
-    private final String nameOfFileSystem;    //16    == 14 + \0
+    private String nameOfFileSystem="";    //16    == 14 + \0
     private int sizeOfMFTFiles;
     private int sizeOfMFTDirs;
     private long freeSpaceDS;           //8
@@ -25,6 +25,11 @@ public class RootHeader
     private static final int MaximumNumberOfFiles = 7653;
     private static final int BlockSize = 256;
     private Vector<Short> arrayOfDirs = new Vector(103);
+
+    public RootHeader()
+    {
+
+    }
 
     public void writeFileHeader()
     {
