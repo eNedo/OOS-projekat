@@ -272,13 +272,13 @@ public class MainClass
 public static long getFileHeaderFreeBlock(RandomAccessFile x,RootHeader rh) throws IOException        //TODO
 { 
     x.seek(ONEMB-106); 
-    int count=0;
-    byte x1,x2;
-    do { 
-        x1=x.read(); //slobodno za alokaciju
-        x2=x.read(); //mft
+    int count=0;                //imamo broj filehedera, toliko puta cemo kroz petlju proci i provjeriti 
+    byte allocationflag, mftflag;// allocationflag i mftflag, kad prodjemo kroz sve, trebamo provjeriti 
+    do { //velicinu frispejsa i vratiti pokazivac
+        allocationflag=x.read(); //slobodno za alokaciju
+        mftflag=x.read(); //ako smo naisli na slobodan mft fajl heder onda preskocimo i cekamo naredni mft fajl za upisivanje da nemamo rupe u memoriji 
     if (x1==0 && x2==1) return x.getFilePointer()-64-106;         //slobodno za alokaciju 
-    else {
+    else {                              //dodati provjeru za freespace
         count++; 
                 if(x1==1 && x2==0)   x.seek(x.getFilePointer()-106); 
         } 
@@ -286,11 +286,4 @@ public static long getFileHeaderFreeBlock(RandomAccessFile x,RootHeader rh) thro
     }
     while ((rh.getSizeOfMFTDirs -170*count) >170); 
 }
-
-public static long getFileHeaderPosition(RandomAccessFile x) throws IOException
-{           //TODO
-    
-    
-    
-} 
 
