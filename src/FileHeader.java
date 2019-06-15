@@ -31,8 +31,8 @@ public class FileHeader
     {
         try
         { 
-             if (isMFTfile==1)  x.write(DataBlock); //64 
             x.seek(position);
+            if (isMFTfile==1)  x.write(DataBlock); //64
             x.writeByte(isAllocated);       //2
             x.writeByte(isMFTfile); 
             x.writeUTF(NameOfFile);      //20  -18 karaktera ime
