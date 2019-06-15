@@ -1,6 +1,7 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.Scanner;
 public class MainClass
 {
@@ -11,15 +12,22 @@ public class MainClass
     
     public static void main(String args[]) throws IOException
     {
-    	File FS = new File(FileSystemPath);
-        RandomAccessFile FAJL=new RandomAccessFile(FS,"rw");
-        Scanner input = new Scanner(System.in);
-        FileHeader fh=new FileHeader(""); 
-        if(checkExistance(FAJL,input))    fh=firstStart(FAJL,input); 
-        else fh.readfromfileandupdate(FAJL); 
-        cmd(fh,FAJL,input); 
-        FAJL.close();
-        input.close();
+//    	File FS = new File(FileSystemPath);
+//        RandomAccessFile FAJL=new RandomAccessFile(FS,"rw");
+//        Scanner input = new Scanner(System.in);
+//        FileHeader fh=new FileHeader(""); 
+//        if(checkExistance(FAJL,input))
+//            fh=firstStart(FAJL,input);
+//        else fh.readfromfileandupdate(FAJL); 
+//        cmd(fh,FAJL,input); 
+//        FAJL.close();
+//        input.close();
+
+
+
+
+        
+
     }
 
     private static void cmd(FileHeader p,RandomAccessFile f,Scanner input)
