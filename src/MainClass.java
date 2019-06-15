@@ -277,11 +277,8 @@ public static long getFileHeaderFreeBlock(RandomAccessFile x,RootHeader rh) thro
     do { //velicinu frispejsa i vratiti pokazivac
         allocationflag=x.read(); //slobodno za alokaciju
         mftflag=x.read(); //ako smo naisli na slobodan mft fajl heder onda preskocimo i cekamo naredni mft fajl za upisivanje da nemamo rupe u memoriji 
-    if (x1==0 && x2==1) return x.getFilePointer()-64-106;         //slobodno za alokaciju 
-    else {                              //dodati provjeru za freespace
-        count++; 
-                if(x1==1 && x2==0)   x.seek(x.getFilePointer()-106); 
-        } 
+    if (allocationflag==1 && (mftflag==0 || mftflag==1))    count++;
+                if(rh.getSizeOfMFTFiles()/170>count)   x.seek(x.getFilePointer(); 
         x.seek(x.getFilePointer-106);
     }
     while ((rh.getSizeOfMFTDirs -170*count) >170); 
