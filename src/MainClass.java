@@ -269,18 +269,31 @@ public class MainClass
      }
 }
 
-public static long getFileHeaderFreeBlock(RandomAccessFile x,RootHeader rh) throws IOException        //TODO
-{ 
-    x.seek(ONEMB-106); 
-    int count=0;                //imamo broj filehedera, toliko puta cemo kroz petlju proci i provjeriti 
-    byte allocationflag, mftflag;// allocationflag i mftflag, kad prodjemo kroz sve, trebamo provjeriti 
-    do { //velicinu frispejsa i vratiti pokazivac
-        allocationflag=x.read(); //slobodno za alokaciju
-        mftflag=x.read(); //ako smo naisli na slobodan mft fajl heder onda preskocimo i cekamo naredni mft fajl za upisivanje da nemamo rupe u memoriji 
-    if (allocationflag==1 && (mftflag==0 || mftflag==1))    count++;
-                if(rh.getSizeOfMFTFiles()/170>count)   x.seek(x.getFilePointer(); 
-        x.seek(x.getFilePointer-106);
-    }
-    while ((rh.getSizeOfMFTDirs -170*count) >170); 
-}
 
+public static long  getFileHeaderFreeBlock(RandomAccessFile x,RootHeader rh,int WRITEFLAG) throws IOException         
+{ 												//  1- upis mft fajl hedera
+    x.seek(ONEMB-106); 										//  0- upis mft fajla 
+     int numberofMFTfiles=0;
+    int numberofMFTheaders=0;
+    byte allocationflag, mftflag;  
+    for(int i=rh.getNumberOfMFTheaders();i>0;i--) 
+    {
+        allocationflag=x.readByte();//ako je 1, omogucava prepis preko postojeceg fajl hedera!
+        mftflag=x.readByte();  // ako je 1, omogucava prepis iskljucivo mft fajla!
+         if (mftflag==1) numberofMFTfiles++; 
+        else numberofMFTheaders++; 
+if(allocationflag==1 && mftflag==0 && WRITEFLAG==1) return x.getFilePointer()-2;//slobodan heder za upis
+if(allocationflag==1 && mftflag==1 && WRITEFLAG==0) return x.getFilePointer()-66;//slobodan mft fajl za upis
+if ((numberofMFTheaders+numberofMFTfiles)==rh.getNumberOfMFTheaders()) 
+	{//|rootheader+direktorijumi|.. slobodan prostor..|fajl hederi|..
+			if(WRITEFLAG==1)	
+							if (170>((rh.getNumberOfDirectoriums()*256+350)+(numberofMFTfiles*170)+(numberofMFTheaders*106)) )
+								return x.getFilePointer()-66; 
+			else 
+							if(106>((rh.getNumberOfDirectoriums()*256+350)+(numberofMFTfiles*170)+(numberofMFTheaders*106)) )			
+								return x.getFilePointer()-2;
+										}
+    }
+}
+}
+ 
