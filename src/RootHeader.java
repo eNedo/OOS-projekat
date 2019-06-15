@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
-public class FileHeaderRoot
+public class RootHeader
 {
     //16+24*3+4*12+81*2 = 350
+    public static final int ROOTHEADERSIZE = 350;
     private final String nameOfFileSystem;    //16    == 14 + \0
     private int sizeOfMFTFiles;
     private int sizeOfMFTDirs;
@@ -178,7 +179,7 @@ public class FileHeaderRoot
         }
     }
 
-    public FileHeaderRoot(String name)
+    public RootHeader(String name)
     {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss");
         nameOfFileSystem = name;
