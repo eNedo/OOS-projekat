@@ -382,7 +382,34 @@ public class RootHeader
         }
 
     }
+ public void stats()
+    {
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
+        {
+        	randomAccessFile.seek(0);
+            System.out.println("Ime fajl sistema:"+randomAccessFile.readUTF());
+            System.out.println("Velicina MFT fajlova:" + randomAccessFile.readInt());
+            System.out.println("Velicina MFT direktorijuma:" + randomAccessFile.readInt());
+            System.out.println("Slobodan prostor"+randomAccessFile.readLong( ));
+            System.out.println("Iskoristeni prostor"+randomAccessFile.readLong( ));
+            System.out.println("Datum kreiranja:"+randomAccessFile.readUTF());
+            System.out.println("Datum modifikacije:"+randomAccessFile.readUTF());
+            System.out.println("Datum zadnjeg koristenja:"+randomAccessFile.readUTF());
+            System.out.println("Broj direktorijuma:"+randomAccessFile.readInt());
+            System.out.println("Broj fajlova:"+randomAccessFile.readInt());
+            for (int i=0;103>i;i++) randomAccessFile.readShort();
+            System.out.println("Maks. broj fajlova u sistemu:"+randomAccessFile.readInt());
+            System.out.println("Maks. broj direktorijuma u sistemu:"+randomAccessFile.readInt());
+            System.out.println("Maksimalna velicina fajla:"+randomAccessFile.readInt());
+            System.out.println("Maksimalni broj direktorijuma:" +randomAccessFile.readInt());
+            System.out.println("Maksimalni broj fajlova:"+randomAccessFile.readInt());
+            System.out.println("velicina bloka:"+randomAccessFile.readInt());
 
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
 }
 
