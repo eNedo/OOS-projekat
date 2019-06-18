@@ -340,10 +340,22 @@ data segment se nista ne mijenja ostaje kako je definisamo
 jos defragmentacija jebeno puzlanje 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ==================================================================================================================================================================================================
-
-
-
-
+NOTE ADD
+negativni preko 10000 presdtavljaju fajlove sa data u mft
+a pozitivni ostaju za dir
+s tim da 0 ide u grupu sa fajlovima
+if num>0 dir
+if num<=0 file
+if num>10000 file with with data in mft
+if num==32555 space empty
+s tim vazno prilikom upisivanja fajla ili dira prvo se upisuju prazna mjesta kako bi se ostavila mogucnst 
+povratka podataka
+tj prvo proci kroz niz i popuniti blokove koji su bili prazni od pocetka a potom oni blokove koji su bili izbrisani
+modifikaciju dodati u kod da ne ide praziti svaki put kada ubacuje novi fajl od pocetka nego da prvo prepise prazne
+blokove a tek onda prepisuje postojece pri tome se moze jos dodati uslov da kada krene brisati prethodno obrisane brojeve
+da prvo brise najstarije fajlove (one kojima je last modified najstariji
+ovo bi bio pravilan nacin brisanja ali ovo s datumom mozemo preskociti posto trebamo napraviti 80/dir/file da se krenu prepisivati 
+nanovo obrisani blokovi
  
  )  (
  ()()
