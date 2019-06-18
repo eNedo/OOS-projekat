@@ -198,5 +198,24 @@ public class DirectoryClass
         randomAccessFile.seek(currentPosition);
     }
 
+	public void listDirectory(RandomAccessFile x,RootHeader fh)
+	{ 
+		try {
+	    	x.seek(0);
+	    	x.seek(102);
+	     
+	    		for (int i=fh.getNumberOfDirectoriums(); i>0; i--){
+ 	  		       System.out.println("Ime direktorijuma:"+x.readUTF());
+ 	  		       System.out.println("Datum koristenja:"+x.readUTF());
+ 	  		       System.out.println("Datum kreiranja:"+x.readUTF());
+ 	  		       System.out.println("Datum modifikovanja:"+x.readUTF());
+ 	  		       x.seek(x.getFilePointer()+2);
+ 	  		       System.out.println("Velicina:"+x.readInt());
+	  		       x.write(isAllocatedFlag);
+	  		       x.writeInt(size);
+	 		}
+		}
+	    	catch (Exception e) {}
+	} 
 }
 
