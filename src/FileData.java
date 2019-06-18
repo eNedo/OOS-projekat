@@ -10,24 +10,20 @@ public class FileData
     private byte[] dataArray;//125
     private short nextBlock;
 
-
- //
-    // dodati bit mapu i funkcije
-
-
-
-    public FileData(String NameOfFile)
-    {
-        try(RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath,"rw"))
-        {
-
-
-        }catch(Exception ex)
-        {
-        	 
-        }
-
-
-    }
+	public FileClass(short x)
+	{ 
+		nextBlock=x;
+ 	}
+	
+	public void writeToFile(/* fajl?*/ ) 
+	{ 						
+		
+	} 
+    
+	//public //return fajl? reconstructFileFromBlocks() 
+	//{ 
+		
+	//}
+ 
 
 }
