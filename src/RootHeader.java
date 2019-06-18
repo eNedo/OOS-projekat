@@ -10,7 +10,7 @@ import java.util.Vector;
 public class RootHeader
 {
     //16+24*3+4*12+81*2 = 350
-    public static final int ROOTHEADERSIZE = 350;
+    public static final int ROOTHEADERSIZE = 347;
 
     private String nameOfFileSystem = "";    //16    == 14 + \0
     private int sizeOfMFTFiles;     //16
@@ -36,7 +36,7 @@ public class RootHeader
     public RootHeader(String name)
     {
         nameOfFileSystem = name;
-        this.nameOfFileSystem = String.format("%-14s", name);
+        this.nameOfFileSystem = String.format("%-14s", name);       // bilo %-14s
         lastUsed = dateCreated = lastModified = Utilities.getCurrentDate();
         numberOfDirectoriums = 0;
         numberOfFiles = 0;
@@ -44,7 +44,7 @@ public class RootHeader
         usedSpaceDS = 0;
         sizeOfMFTFiles = 0;
         sizeOfMFTDirs = 0;
-        arrayOfDirs= new short[103];
+        arrayOfDirs= new short[103];    // bilo 103
         this.writeFileHeader();
 
     }
@@ -64,9 +64,8 @@ public class RootHeader
             randomAccessFile.writeInt(numberOfDirectoriums);
             randomAccessFile.writeInt(numberOfFiles);
             for (int i = 0; i < arrayOfDirs.length; i++)
-            {
                 randomAccessFile.writeShort(arrayOfDirs[i]);
-            }
+
             randomAccessFile.writeInt(maxNumOfFilesInSystem);
             randomAccessFile.writeInt(maxNumOfDirs);
             randomAccessFile.writeInt(MaximumSizeOfFile);
