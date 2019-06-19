@@ -1,11 +1,4 @@
-import groovyjarjarantlr.StringUtils;
-import org.codehaus.groovy.tools.shell.Main;
-
 import java.io.RandomAccessFile;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Vector;
 
 public class RootHeader
 {
@@ -13,22 +6,22 @@ public class RootHeader
     public static final int ROOTHEADERSIZE = 347;
 
     private String nameOfFileSystem = "";    //16    == 14 + \0
-    private int sizeOfMFTFiles;     //16
-    private int sizeOfMFTDirs;      //20
-    private long freeSpaceDS;           //24
-    private long usedSpaceDS;           //32
-    private String dateCreated;         //40
-    private String lastModified;        //62
-    private String lastUsed;            //84
-    private int numberOfDirectoriums;   //109
-    private int numberOfFiles;          //113
-    private short[] arrayOfDirs;        //117
-    private static final int maxNumOfFilesInSystem = 3495;  //117+103*2=323
-    private static final int maxNumOfDirs = 7653;           //327
-    private static final int MaximumSizeOfFile = 65536;     //331
-    private static final int MaximumNumberOfDirs = 3495;    //335
-    private static final int MaximumNumberOfFiles = 7653;   //339
-    private static final int BlockSize = 256;               //343
+    private int sizeOfMFTFiles;
+    private int sizeOfMFTDirs;
+    private long freeSpaceDS;
+    private long usedSpaceDS;
+    private String dateCreated;
+    private String lastModified;
+    private String lastUsed;
+    private int numberOfDirectoriums;
+    private int numberOfFiles;
+    private short[] arrayOfDirsAndFiles;       // [ 103 ]
+    private static final int maxNumOfFilesInSystem = 3495;
+    private static final int maxNumOfDirs = 7653;
+    private static final int MaximumSizeOfFile = 65536;
+    private static final int MaximumNumberOfDirs = 3495;
+    private static final int MaximumNumberOfFiles = 7653;
+    private static final int BlockSize = 256;
 
     public RootHeader()
     {}
@@ -36,7 +29,7 @@ public class RootHeader
     public RootHeader(String name)
     {
         nameOfFileSystem = name;
-        this.nameOfFileSystem = String.format("%-14s", name);       // bilo %-14s
+        this.nameOfFileSystem = String.format("%-14s", name);
         lastUsed = dateCreated = lastModified = Utilities.getCurrentDate();
         numberOfDirectoriums = 0;
         numberOfFiles = 0;
@@ -44,7 +37,7 @@ public class RootHeader
         usedSpaceDS = 0;
         sizeOfMFTFiles = 0;
         sizeOfMFTDirs = 0;
-        arrayOfDirs= new short[103];    // bilo 103
+        arrayOfDirsAndFiles = new short[103];    // bilo 103
         this.writeFileHeader();
 
     }
@@ -63,8 +56,8 @@ public class RootHeader
             randomAccessFile.writeUTF(lastUsed);
             randomAccessFile.writeInt(numberOfDirectoriums);
             randomAccessFile.writeInt(numberOfFiles);
-            for (int i = 0; i < arrayOfDirs.length; i++)
-                randomAccessFile.writeShort(arrayOfDirs[i]);
+            for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
+                randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
 
             randomAccessFile.writeInt(maxNumOfFilesInSystem);
             randomAccessFile.writeInt(maxNumOfDirs);
@@ -349,7 +342,7 @@ public class RootHeader
         }
     }
 
-    public short[] getArrayOfDirs()
+    public static short[] getArrayOfDirsAndFiles()
     {
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
@@ -358,7 +351,8 @@ public class RootHeader
             for (int i = 0; i < 103; i++)
                 tempArray[i]=randomAccessFile.readShort();
 
-            return (this.arrayOfDirs=tempArray);
+//            return (this.arrayOfDirsAndFiles =tempArray);
+            return tempArray;
 
         } catch (Exception ex)
         {
@@ -367,14 +361,14 @@ public class RootHeader
         return null;
     }
 
-    public void setArrayOfDirs(short[] arrayOfDirs)
+    public static void setArrayOfDirsAndFiles(short[] arrayOfDirsAndFiles)
     {
-        this.arrayOfDirs=arrayOfDirs;
+//        this.arrayOfDirsAndFiles = arrayOfDirsAndFiles;
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
             randomAccessFile.seek(117);
             for (int i = 0; i < 103; i++)
-                randomAccessFile.writeShort(arrayOfDirs[i]);
+                randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
 
         } catch (Exception ex)
         {

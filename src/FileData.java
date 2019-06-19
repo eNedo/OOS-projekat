@@ -10,7 +10,7 @@ public class FileData
     private byte[] dataArray;//125
     private short nextBlock;
 
-	public FileClass(short x)
+	public FileData(short x)
 	{ 
 		nextBlock=x;
  	}

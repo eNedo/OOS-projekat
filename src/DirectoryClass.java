@@ -1,8 +1,5 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Vector;
 
 public class DirectoryClass
 {
@@ -15,7 +12,9 @@ public class DirectoryClass
     private String dateUsed;            //42+24=68
     private String dateModified;        //68+24=92
     private int size;                    //92+4
-    private short[] arrayOfDirs; // vrijednost 55555 ako prazan element
+    private short[] arrayOfDirsAndFiles; // vrijednost 32555 ako prazan element
+
+    //    private static int numOfBlocksInMFT;    // globalna koja pamti koliko ima blokova u mft-u da se mozemo pozicionirati na kraj
 
     public DirectoryClass(String name, byte Depth)
     {
@@ -23,12 +22,60 @@ public class DirectoryClass
         dateModified = dateUsed = dateCreated = Utilities.getCurrentDate();
         nameOfDirectory = String.format("%-14s", name);
         depthFlag = Depth;
-        arrayOfDirs = new short[82];
-        for (int i = 0; i < arrayOfDirs.length; i++)
-            arrayOfDirs[i] = (short) 5555;
+        arrayOfDirsAndFiles = new short[82];
+        for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
+            arrayOfDirsAndFiles[i] = (short) 32555;
 
         this.size = 0;
 
+    }
+
+    public static String getNameOfDirectory(RandomAccessFile randomAccessFile) throws IOException
+    {
+        randomAccessFile.seek(randomAccessFile.getFilePointer() + 1);
+        //        nameOfDirectory = randomAccessFile.readUTF();
+        String readName = randomAccessFile.readUTF();
+        randomAccessFile.seek(randomAccessFile.getFilePointer() - 17); // 16+1
+        //        return nameOfDirectory.trim();
+        return readName.trim();
+    }
+
+    public static long getPointerPositionForGivenBlock(short blockNum)
+    {
+        if (blockNum == 0)
+            return 0;
+
+        return RootHeader.ROOTHEADERSIZE + (blockNum - 1) * DirectoryClass.DIRHEADERSIZE;
+    }
+
+    public static short findDirectoryByName(RandomAccessFile randomAccessFile, String name) throws IOException
+    {
+        // long previousPointerPosition = randomAccessFile.getFilePointer();
+        // TODO: nisam vise siguran u ovaj zivot. Nije GOTOVO!
+        short[] tempArrayOfDirsAndFiles;
+        if ("root".contains(name))  //apsolutna putanja
+        {
+            //  npr: root/dir1  pathArray[0] == root i pathArray[1]==dir1
+            String[] pathArray= name.split("/");
+            tempArrayOfDirsAndFiles = RootHeader.getArrayOfDirsAndFiles();
+
+            String readName;
+            for (int i = 0; i < 103; i++)
+            {
+                if (tempArrayOfDirsAndFiles[i] == 32555)
+                    continue;
+
+                randomAccessFile.seek(getPointerPositionForGivenBlock(tempArrayOfDirsAndFiles[i]));
+                readName = DirectoryClass.getNameOfDirectory(randomAccessFile);
+
+                if (pathArray[1].equals(readName))
+                    return tempArrayOfDirsAndFiles[i];
+            }
+        } else
+        {
+
+        }
+        return 0;
     }
 
     public void writeDirInFile(RandomAccessFile randomAccessFile) throws IOException
@@ -40,12 +87,11 @@ public class DirectoryClass
         randomAccessFile.writeUTF(this.dateUsed);
         randomAccessFile.writeUTF(this.dateModified);
         randomAccessFile.writeInt(this.size);
-        for (int i = 0; i < arrayOfDirs.length; i++)
-            randomAccessFile.writeShort(arrayOfDirs[i]);
+        for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
+            randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
 
         randomAccessFile.seek(randomAccessFile.getFilePointer() - DIRHEADERSIZE);
     }
-
 
     public byte getIsAllocatedFlag(RandomAccessFile randomAccessFile) throws IOException
     {
@@ -59,14 +105,6 @@ public class DirectoryClass
         this.isAllocatedFlag = isAllocatedFlag;
         randomAccessFile.writeByte(isAllocatedFlag);
         randomAccessFile.seek(randomAccessFile.getFilePointer() - 1);
-    }
-
-    public String getNameOfDirectory(RandomAccessFile randomAccessFile) throws IOException
-    {
-        randomAccessFile.seek(randomAccessFile.getFilePointer() + 1);
-        nameOfDirectory = randomAccessFile.readUTF();
-        randomAccessFile.seek(randomAccessFile.getFilePointer() - 17); // 16+1
-        return nameOfDirectory.trim();
     }
 
     public void setNameOfDirectory(RandomAccessFile randomAccessFile, String nameOfDirectory) throws IOException
@@ -179,11 +217,11 @@ public class DirectoryClass
         randomAccessFile.seek(randomAccessFile.getFilePointer() + 91);
 
         boolean flag = false;
-        for (int i = 0; i < arrayOfDirs.length; i++)
+        for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
         {
             short tmp;
             tmp = randomAccessFile.readShort();
-            if (tmp == (short) 55_555)
+            if (tmp == (short) 32555) ;
             {
                 flag = true;
                 randomAccessFile.seek(randomAccessFile.getFilePointer() - 2);
@@ -196,6 +234,19 @@ public class DirectoryClass
             System.out.println("no space for new Direcotry");
         }
         randomAccessFile.seek(currentPosition);
+    }
+
+    public long getLastDirPosition()
+    {
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "r"))
+        {
+            //root numOfDir * sizeDirs
+
+        } catch (Exception ex)
+        {
+
+        }
+        return 0;
     }
 
 }
