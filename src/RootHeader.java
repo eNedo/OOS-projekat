@@ -371,7 +371,7 @@ public class RootHeader
         }
     }
 
-    public short[] getArrayOfDirs()
+    public static short[] getArrayOfDirs()
     {
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
@@ -380,7 +380,8 @@ public class RootHeader
             for (int i = 0; i < 103; i++)
                 tempArray[i]=randomAccessFile.readShort();
 
-            return (this.arrayOfDirs=tempArray);
+//            return (this.arrayOfDirs=tempArray);
+            return tempArray;
 
         } catch (Exception ex)
         {
@@ -405,8 +406,6 @@ public class RootHeader
 
     }
 
-
- 
 
     public void stats()
     {
