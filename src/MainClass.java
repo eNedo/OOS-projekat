@@ -51,14 +51,17 @@ public class MainClass
                         break;
                     } else
                     {
+                    		//
                     	byte tmp[]= new byte[64]; 
                     	byte temp2=1;
                     	for(int i=0;64>i;i++) tmp[i]=1;
                     	FileHeader novifajl=new FileHeader(words[1],64,0,0,temp2,tmp);
                     	//System.out.println(novifajl.getNameOfFile(f).length()); 
                     	novifajl.writeFiletoMFTheader(p, f); 
-                    	System.out.println("uspjeh ili ne"+novifajl.searchMFTfiles(p, f, words[1]));
-    
+                    	String fff=words[1]; 
+                    	for(;fff.length()<18;) fff=fff+ " "; 
+                    	System.out.println("uspjeh ili ne"+novifajl.searchMFTfiles(p, f, fff));
+                    		// kod za debug
                     	
                     	
                       //	p.setNumberOfDirectoriums(p.getNumberOfDirectoriums()+1);
@@ -262,9 +265,6 @@ public class MainClass
             System.out.println("Unesite ime novog fajl sistema!");
             name = s.nextLine();
         } while (name.length() > 15);
-
-        while (name.length() <= 15)
-            name += " "; 
         RootHeader p = new RootHeader(name);
          System.out.println("Uspjesno smo kreirali novi fajl sistem! "); 
         System.out.println("Mozete poceti manipulisati sa fajl sistemom."); 
