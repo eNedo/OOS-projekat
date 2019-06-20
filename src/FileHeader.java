@@ -34,6 +34,7 @@ public class FileHeader
         	 int numberofMFTfiles=0;
         	    int numberofMFTheaders=0;
         	    System.out.println(rh.getSizeOfMFTDirs()+" "+rh.getSizeOfMFTFiles());
+  
         	    byte allocationflag, mftflag;  					//prvo pokretanje
   if((rh.getSizeOfMFTDirs()+rh.getSizeOfMFTFiles())==0)    x.seek(x.getFilePointer()-64);
   else {
@@ -44,16 +45,15 @@ public class FileHeader
         	    if(mftflag==1) numberofMFTfiles++; else numberofMFTheaders++; 
         	    if (isMFTfile==1 && allocationflag==1 && mftflag==1){ x.seek(x.getFilePointer()-66); break;} 
         	    if (isMFTfile==0 && allocationflag==1) {x.seek(x.getFilePointer()-2); break; }
-        	   if (i==rh.getSizeOfMFTDirs()+rh.getSizeOfMFTFiles()) {
-        	    if (170>((rh.getNumberOfDirectoriums()*255+347)+(numberofMFTfiles*170)+(numberofMFTheaders*106)) )
-					{x.seek(x.getFilePointer()-66); break;}  
-        	    else 		// provjera za granicne slucajeve tj. da li ima memorije za upis
-				if(106>((rh.getNumberOfDirectoriums()*255+347)+(numberofMFTfiles*170)+(numberofMFTheaders*106)) )			
-					 {x.seek(x.getFilePointer()-2); break; }
-        	    x.seek(x.getFilePointer()-106);	//pomjeranje na naredni heder
-        	   }
+          	    if (i!=1) {if(mftflag==1)
+          	    	x.seek(x.getFilePointer()-172);
+          	    else x.seek(x.getFilePointer()-108); 
+        	    }
+        	    }
+if (isMFTfile==1 && 170<(MainClass.ONEMB-(rh.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )   x.seek(x.getFilePointer()-172); 
+        	    else // provjera za granicne slucajeve tj. da li ima memorije za upis
+if(isMFTfile==0  && 106<(MainClass.ONEMB-(rh.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )	x.seek(x.getFilePointer()-108);
         	  } 
-  }	    
         	// upis 
         	if (isMFTfile == 1) x.write(DataBlock); //64
             x.writeByte(isAllocated);       //2
@@ -80,20 +80,22 @@ public class FileHeader
         try
         {
         	rh.stats(); 
-        	x.seek(MainClass.ONEMB-105);
+        	x.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
+         	    String temp; 
         	    for(int i=rh.getSizeOfMFTDirs()+rh.getSizeOfMFTFiles();i>0;i--)
         	    { 
+        	    x.readByte();		//preskacemo allocate fleg
          	    mftflag=x.readByte(); 
          	    if (mftflag==1) 
          	    	{ 
-         	    		x.seek(x.getFilePointer()+2); 
-         	    		String temp=x.readUTF(); 
-         	    		System.out.println(temp+ " "+ temp.length()); 
-         	    		if(filename.compareTo(x.readUTF())==0) return 1;
+         	    	 temp=x.readUTF();
+         	    	System.out.println(temp+ " " +  temp.length());
+         	    	System.out.println(filename+ " "+filename.length());		//TODO  
+           	    		if(filename.compareTo(temp)==0) return 1;
          	    	}
-         	    if (mftflag==1) x.seek(x.getFilePointer()-171);
-         	    else x.seek(x.getFilePointer()-107);
+         	    if (mftflag==1) x.seek(x.getFilePointer()-192);
+         	    else x.seek(x.getFilePointer()-128);
         	    } 
         	    return 0; 		// 0-fajl nije pronadjen
         } catch (Exception e)	// 1-fajl pronadjen
