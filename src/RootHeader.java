@@ -33,8 +33,9 @@ public class RootHeader
 
     public RootHeader(String name)
     {
+        for (; name.length()<14;) name=name+ " ";
+        System.out.println(name + " " + name.length());
         nameOfFileSystem = name;
-        this.nameOfFileSystem = String.format("%-14s", name);       // bilo %-14s
         lastUsed = dateCreated = lastModified = Utilities.getCurrentDate();
         numberOfDirectoriums = 0;
         numberOfFiles = 0;
@@ -104,8 +105,9 @@ public class RootHeader
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
             randomAccessFile.seek(16);
-            return (this.sizeOfMFTFiles = randomAccessFile.readInt());
-
+            int temp=randomAccessFile.readInt(); 
+            randomAccessFile.close();
+            return (temp);
         } catch (Exception ex)
         {
             ex.printStackTrace();
