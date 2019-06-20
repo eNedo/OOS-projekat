@@ -29,7 +29,7 @@ public class FileHeader
     public void writeFiletoMFTheader(RootHeader rh,RandomAccessFile x)
     {
         try
-        {
+        {       //allocationflag==0 -moguc prepis 
         	x.seek(MainClass.ONEMB-106);
         	 int numberofMFTfiles=0;
         	    int numberofMFTheaders=0;
@@ -43,8 +43,8 @@ public class FileHeader
         	    allocationflag=x.readByte(); 
         	    mftflag=x.readByte(); 
         	    if(mftflag==1) numberofMFTfiles++; else numberofMFTheaders++; 
-        	    if (isMFTfile==1 && allocationflag==1 && mftflag==1){ x.seek(x.getFilePointer()-66); break;} 
-        	    if (isMFTfile==0 && allocationflag==1) {x.seek(x.getFilePointer()-2); break; }
+        	    if (isMFTfile==1 && allocationflag==0 && mftflag==1){ x.seek(x.getFilePointer()-66); break;} 
+        	    if (isMFTfile==0 && allocationflag==0) {x.seek(x.getFilePointer()-2); break; }
           	    if (i!=1) {if(mftflag==1)
           	    	x.seek(x.getFilePointer()-172);
           	    else x.seek(x.getFilePointer()-108); 
@@ -75,6 +75,9 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rh.getNumberOfDirectoriums()*255+347)-
         {
         }
     }
+    
+    // TODO
+    // funkcija za brisanje ce staviti allocateflag na 0 i updejtovati niz u odgovarajuceg direktorijuma
     public int searchMFTfiles(RootHeader rh,RandomAccessFile x,String filename)
     {
         try
