@@ -194,6 +194,9 @@ public class MainClass
                         System.out.println("Zdravo!");
                         System.exit(0);
                         break;
+                    case "cd":
+                        // putanja ka direktorijumu
+                        break;
                     default:
                         // dodati 'ulazenje' u direktorijume, promjena trenutne pozicije^^
                 }

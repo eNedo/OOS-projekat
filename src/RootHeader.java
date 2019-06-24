@@ -2,6 +2,7 @@
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
@@ -33,6 +34,8 @@ public class RootHeader
 
     public RootHeader(String name)
     {
+        //TODO: NE DIRAJ MOJE! filip
+
         for (; name.length()<14;) name=name+ " ";
         System.out.println(name + " " + name.length());
         nameOfFileSystem = name;
@@ -43,7 +46,8 @@ public class RootHeader
         usedSpaceDS = 0;
         sizeOfMFTFiles = 0;
         sizeOfMFTDirs = 0;
-        arrayOfDirs= new short[103];    // bilo 103
+        arrayOfDirs= new short[103];
+        Arrays.fill(arrayOfDirs,(short)32555);  // dodao filip
         this.writeFileHeader();
 
     }
@@ -390,14 +394,14 @@ public class RootHeader
         return null;
     }
 
-    public void setArrayOfDirs(short[] arrayOfDirs)
+    public static void setArrayOfDirsAndFiles(short[] arrayOfDirsAndFiles)
     {
-        this.arrayOfDirs=arrayOfDirs;
+//        this.arrayOfDirs=arrayOfDirs;
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
             randomAccessFile.seek(117);
             for (int i = 0; i < 103; i++)
-                randomAccessFile.writeShort(arrayOfDirs[i]);
+                randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
 
         } catch (Exception ex)
         {

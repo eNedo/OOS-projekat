@@ -72,10 +72,10 @@ public class DirectoryClass
             do
             {
                 tempPosition = currentPointerPosition;
-                System.out.println(randomAccessFile.getFilePointer());
+                //                System.out.println("pre getEndOfDirectoryHeaderBlock: "+randomAccessFile.getFilePointer());
                 directoryClass = makeDirectoryObject(randomAccessFile);
-                System.out.println(randomAccessFile.getFilePointer());
-                randomAccessFile.seek(randomAccessFile.getFilePointer()+DirectoryClass.DIRHEADERSIZE);
+                //                System.out.println("posle getEndOfDirectoryHeaderBlock: "+randomAccessFile.getFilePointer());
+                randomAccessFile.seek(randomAccessFile.getFilePointer() + DirectoryClass.DIRHEADERSIZE);
                 currentPointerPosition = randomAccessFile.getFilePointer();
             } while (directoryClass != null && !"".equals(directoryClass.nameOfDirectory));
 
@@ -90,8 +90,11 @@ public class DirectoryClass
     // za dobijenu poziciju u MTFblocku izracunaj redni broj bloka
     public static short calculateDirectoryBlockWithPointer(long currentPosition)
     {
+
         long position = currentPosition - RootHeader.ROOTHEADERSIZE;
-        return (short) (position / (long) DirectoryClass.DIRHEADERSIZE);
+        if (position < 0)
+            return 0;
+        return (short) (position / (long) DirectoryClass.DIRHEADERSIZE + 1);
     }
 
     public static short findDirectoryByName(RandomAccessFile randomAccessFile, String name) throws IOException
@@ -128,7 +131,7 @@ public class DirectoryClass
     {
         return new DirectoryClass(getIsAllocatedFlag(randomAccessFile), getNameOfDirectory(randomAccessFile), getDepthFlag(randomAccessFile),
                 getDateCreated(randomAccessFile), getDateUsed(randomAccessFile), getDateModified(randomAccessFile),
-                getSize(randomAccessFile), getArrayOfDirs(randomAccessFile));
+                getSize(randomAccessFile), getArrayOfDirsAndFiles(randomAccessFile));
     }
 
     public static byte getIsAllocatedFlag(RandomAccessFile randomAccessFile) throws IOException
@@ -181,7 +184,17 @@ public class DirectoryClass
         return size;
     }
 
-    public static short[] getArrayOfDirs(RandomAccessFile randomAccessFile) throws IOException
+    public static void setArrayOfDirsAndFiles(RandomAccessFile randomAccessFile, short[] arrayOfDirsAndFiles) throws IOException
+    {
+        randomAccessFile.seek(randomAccessFile.getFilePointer() + 91);
+        for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
+           randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
+
+        randomAccessFile.seek(randomAccessFile.getFilePointer() - DIRHEADERSIZE);
+
+    }
+
+    public static short[] getArrayOfDirsAndFiles(RandomAccessFile randomAccessFile) throws IOException
     {
         short[] readArray = new short[82];
         randomAccessFile.seek(randomAccessFile.getFilePointer() + 91);
@@ -191,6 +204,70 @@ public class DirectoryClass
         }
         randomAccessFile.seek(randomAccessFile.getFilePointer() - DIRHEADERSIZE);
         return readArray;
+    }
+
+    public boolean checkFreeSpaceInDirectoryArray(RandomAccessFile randomAccessFile) throws IOException
+    {
+
+        short[] temp = DirectoryClass.getArrayOfDirsAndFiles(randomAccessFile);
+        short emptyValue = 32555;
+        for (int i = 0; i < temp.length; i++)
+        {
+            if (temp[i] == emptyValue)
+                return true;
+        }
+        return false;
+
+    }
+
+    //prima pocetak trenutnog bloka direktorijuma ili rootHeadera i odredjuje gdje ce napraviti novi
+    //TODO: trenutno stavlja samo na kraj
+    public boolean createNewDirectoryOrFile(RandomAccessFile randomAccessFile, String nameOfDirectory) throws IOException
+    {
+        long currentPosition = randomAccessFile.getFilePointer();
+        short currentBlockNum = calculateDirectoryBlockWithPointer(randomAccessFile.getFilePointer());
+        //        System.out.println("current: "+currentPosition+"   blokcnum: "+blockNum);
+        int indexOf35222 = 0;
+
+        if (checkFreeSpaceInDirectoryArray(randomAccessFile))
+        {
+            short[] tempArray;
+            if (currentBlockNum == 0)
+                tempArray = RootHeader.getArrayOfDirs();
+            else
+                tempArray = DirectoryClass.getArrayOfDirsAndFiles(randomAccessFile);
+
+            for (int i = 0; i < tempArray.length; i++)
+            {
+                if (tempArray[i] == (short) 32555)
+                {
+                    indexOf35222 = i;
+                    break;
+                }
+            }
+
+            tempArray[indexOf35222] = calculateDirectoryBlockWithPointer(getEndOfDirectoryHeaderBlock());
+            if(currentBlockNum==0)
+                RootHeader.setArrayOfDirsAndFiles(tempArray);
+            else
+                DirectoryClass.setArrayOfDirsAndFiles(randomAccessFile,tempArray);
+
+
+            //TODO: treba sve pobdatke o novom direktorijumu u konstruktor
+            DirectoryClass newDir = new DirectoryClass(nameOfDirectory, getDepthFlag(randomAccessFile));
+            randomAccessFile.seek(getEndOfDirectoryHeaderBlock());
+
+            System.out.println("WRITING on position: " + randomAccessFile.getFilePointer() +
+                    " bloknum: " + calculateDirectoryBlockWithPointer(randomAccessFile.getFilePointer()));
+            newDir.writeDirInFile(randomAccessFile);
+
+            randomAccessFile.seek(currentPosition);
+            return true;
+        } else
+            System.out.println("Not enough free space");
+
+        return false;
+
     }
 
     public void writeDirInFile(RandomAccessFile randomAccessFile) throws IOException
@@ -266,6 +343,7 @@ public class DirectoryClass
         randomAccessFile.seek(randomAccessFile.getFilePointer() - 91);
     }
 
+    //Lipa pisao: ne znam sta radi
     public void setNewDirectory(RandomAccessFile randomAccessFile, short blockNumber) throws IOException
     {
         long currentPosition = randomAccessFile.getFilePointer();
