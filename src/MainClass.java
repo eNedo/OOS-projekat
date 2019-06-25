@@ -27,7 +27,7 @@ public class MainClass
 
     }
 
-    private static void cmd(RootHeader p, RandomAccessFile f, Scanner input)
+    private static void cmd(RootHeader rootheader, RandomAccessFile file, Scanner input)
     {
         try
         {
@@ -53,21 +53,17 @@ public class MainClass
                             break;
                         } else
                         {
-                            byte tmp[] = new byte[64];
-                            byte temp2 = 1;
-                            for (int i = 0; 64 > i; i++)
-                                tmp[i] = 1;
-                            FileHeader novifajl = new FileHeader(words[1], 64, 0, 0, temp2, tmp);
+                            //byte tmp[] = new byte[64];
+                           // byte temp2 = 1;
+                            //for (int i = 0; 64 > i; i++)
+                             //   tmp[i] = 1;
+                           // FileHeader novifajl = new FileHeader(words[1], 64, 0, 0, temp2, tmp);
                             //System.out.println(novifajl.getNameOfFile(f).length());
-                            novifajl.writeFiletoMFTheader(p, f);
-                            System.out.println("uspjeh ili ne" + novifajl.searchMFTfiles(p, f, words[1]));
-
-
-                            //	p.setNumberOfDirectoriums(p.getNumberOfDirectoriums()+1);
-                            // System.out.println("mkdir je unesen");
-                            //   byte dirflag=0;
-                            // DirectoryClass dir=new DirectoryClass(words[1],dirflag);
-                            // dir.writedir(f, p);				//jebemterobijo
+                            //novifajl.writeFiletoMFTheader(rootheader, file);
+                            //System.out.println("uspjeh ili ne" + novifajl.searchMFTfiles(rootheader, file, words[1]));
+                            //String in=input.nextLine();
+                            //if (in.equals("da")) novifajl.deleteMFTFile(rootheader, file, words[1]);
+                         
                         }
 
                         break;
@@ -172,7 +168,7 @@ public class MainClass
 
                     case "stat":
                         System.out.println("stat je unesen");
-                        p.stats();
+                        rootheader.stats();
                         break;
 
                     case "ln": // ln - make links between files (OPCIONO)
@@ -275,15 +271,12 @@ public class MainClass
         {
             System.out.println("Unesite ime novog fajl sistema!");
             name = s.nextLine();
-        } while (name.length() > 15);
+        } while (name.length() > 14);
 
-        while (name.length() <= 15)
-            name += " ";
-        RootHeader p = new RootHeader(name);
+          RootHeader p = new RootHeader(name);
         System.out.println("Uspjesno smo kreirali novi fajl sistem! ");
         System.out.println("Mozete poceti manipulisati sa fajl sistemom.");
         return p;
     }
 
 }
- 
