@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -111,7 +112,7 @@ public class DataSegment
             ex.printStackTrace();
         }
     }
-    public int insertDataInDataSegment(int numOfBlocks,String nameOfFile){
+    public int writeDataInDataSegment(int numOfBlocks, String nameOfFile){
         int[] arrayOfFreeBlocks=findArrayOfFreeBlocks(numOfBlocks);
         try {
             RandomAccessFile randomAccessFile = new RandomAccessFile(nameOfFile, "r");
@@ -157,6 +158,35 @@ public class DataSegment
         catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public byte[] readDataFromDataSegment1(int numOfBlocks, int startingBlock) // Filip version
+    {
+        ArrayList<Byte> buffeerArray = new ArrayList<>();
+        try
+        {
+            RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "r");
+            randomAccessFileSystem.seek(MainClass.ONEMB + startingBlock * DataSegmentBlockSize+1 );
+            int nextBlock=0;
+            for (int i = 0; i < numOfBlocks && nextBlock!=-1; i++)
+            {
+                for (int j = 0; j < 123; j++)
+                {
+                    buffeerArray.add(randomAccessFileSystem.readByte());
+                }
+                nextBlock = randomAccessFileSystem.readInt();
+                randomAccessFileSystem.seek(MainClass.ONEMB + nextBlock * DataSegmentBlockSize+1 );
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        byte[] byteArray = new byte[buffeerArray.size()];
+        for (int i = 0; i < byteArray.length; i++)
+        {
+            byteArray[i] = buffeerArray.get(i);
+        }
+        return byteArray;
     }
 
 
