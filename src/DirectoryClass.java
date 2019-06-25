@@ -259,7 +259,7 @@ public class DirectoryClass
 
             System.out.println("WRITING on position: " + randomAccessFile.getFilePointer() +
                     " bloknum: " + calculateDirectoryBlockWithPointer(randomAccessFile.getFilePointer()));
-            newDir.writeDirInFile(randomAccessFile);
+            newDir.writeDirOnGivenPosition(randomAccessFile);
 
             randomAccessFile.seek(currentPosition);
             return true;
@@ -270,7 +270,7 @@ public class DirectoryClass
 
     }
 
-    public void writeDirInFile(RandomAccessFile randomAccessFile) throws IOException
+    public void writeDirOnGivenPosition(RandomAccessFile randomAccessFile) throws IOException
     {
         randomAccessFile.writeByte(this.isAllocatedFlag);
         randomAccessFile.writeUTF(this.nameOfDirectory);
