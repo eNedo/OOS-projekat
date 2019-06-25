@@ -1,9 +1,5 @@
-import org.codehaus.groovy.tools.shell.Main;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 
@@ -129,8 +125,52 @@ public class DataSegment
             ex.printStackTrace();
         }
     }
+    public int insertDataInDataSegment(int numOfBlocks,String nameOfFile){
+        int[] arrayOfFreeBlocks=findArrayOfFreeBlocks(numOfBlocks);
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(nameOfFile, "r");
+            RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "w");
+            randomAccessFileSystem.seek(MainClass.ONEMB);
+            byte[] bufferArray = new byte[123];
+            byte writeByteUsed = 1;
+            int i = 0;
+            while(i < numOfBlocks) {
+                randomAccessFileSystem.writeByte(writeByteUsed);
+                randomAccessFileSystem.seek(arrayOfFreeBlocks[i]*DataSegmentBlockSize);
+                for (int j = 0; j < bufferArray.length; j++) {
+                    randomAccessFileSystem.writeByte(randomAccessFile.readByte());
+                }
+                if(i < numOfBlocks)
+                    randomAccessFileSystem.writeInt(arrayOfFreeBlocks[++i]);
+                else {
+                    randomAccessFileSystem.seek(arrayOfFreeBlocks[i]*DataSegmentBlockSize+124);
+                    randomAccessFileSystem.writeInt(-1);
+                }
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        return arrayOfFreeBlocks[0];
+    }
 
-
+    public void readDataFromDataSegment(int numOfBlocks,int startingBlock,byte[] buffeerArray) {
+        try {
+            RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "r");
+            randomAccessFileSystem.seek(MainClass.ONEMB + startingBlock*DataSegmentBlockSize + 1);
+            for(int i=0;i<numOfBlocks;i++){
+                for(int j=0;j<123;j++) {
+                    buffeerArray[i] = randomAccessFileSystem.readByte();
+                }
+                int nextBlock;
+                nextBlock = randomAccessFileSystem.readInt();
+                randomAccessFileSystem.seek(MainClass.ONEMB + nextBlock*DataSegmentBlockSize + 1);
+            }
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
