@@ -6,20 +6,16 @@ import java.util.Random;
 public class DataSegment
 {
     public static final long ENDOFFILESYSTEM = 20*MainClass.ONEMB;
-
     public static long lastUsedPosition= MainClass.ONEMB;
-
     public static final int DataSegmentBlockSize = 128;
     public byte isAlocate;
     public byte[] data;
     public int nextBlock;
     // maksimalan je fajl je od 64KB potrebno je 533 bloka za njega
-
+    
     public DataSegment()
-    {
-
-    }
-
+    {}
+    
     public static void deleteFileInDataSegment(int startBlock, int numOfBlocks)
     {
         int currentBlock=startBlock;
@@ -29,14 +25,11 @@ public class DataSegment
             do
             {
                 randomAceesFile.seek(calculatePointerWithBlockNum(startBlock));
-                randomAceesFile.writeByte((byte)0);
+                randomAceesFile.writeByte((byte)0);					 
                 randomAceesFile.seek(randomAceesFile.getFilePointer()+123);
-                currentBlock=randomAceesFile.readInt();
+                currentBlock=randomAceesFile.readInt();				 
                 numOfBlocks--;
-
             }while(currentBlock!=-1 && numOfBlocks>0);
-
-
         }catch(Exception ex)
         {
             ex.printStackTrace();
@@ -48,7 +41,6 @@ public class DataSegment
         int currentBlock=startBlock;
         try(RandomAccessFile randomAceesFile = new RandomAccessFile(MainClass.FileSystemPath,"rw"))
         {
-
             do
             {
                 randomAceesFile.seek(calculatePointerWithBlockNum(startBlock));
@@ -56,19 +48,13 @@ public class DataSegment
                 randomAceesFile.seek(randomAceesFile.getFilePointer()+123);
                 currentBlock=randomAceesFile.readInt();
                 numOfBlocks--;
-
             }while(currentBlock!=-1 && numOfBlocks>0);
-
-
         }catch(Exception ex)
         {
             ex.printStackTrace();
         }
     }
-
-
-
-
+    
     public static long calculatePointerWithBlockNum(int blockNumber)
     {
         return MainClass.ONEMB+blockNumber*DataSegment.DataSegmentBlockSize;
@@ -158,11 +144,12 @@ public class DataSegment
         try {
             RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "r");
             randomAccessFileSystem.seek(MainClass.ONEMB + startingBlock*DataSegmentBlockSize + 1);
+            int nextBlock;
             for(int i=0;i<numOfBlocks;i++){
-                for(int j=0;j<123;j++) {
+                for(int j=0;j<123;j++) {			
                     buffeerArray[i] = randomAccessFileSystem.readByte();
-                }
-                int nextBlock;
+                }	//flush-ovati bafer da bi bio prazan za citanje narednog bloka, mozda u neki privremeni
+                	// fajl ili cak fajl koji se treba snimiti na racunar.. 
                 nextBlock = randomAccessFileSystem.readInt();
                 randomAccessFileSystem.seek(MainClass.ONEMB + nextBlock*DataSegmentBlockSize + 1);
             }
