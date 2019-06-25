@@ -8,9 +8,9 @@ public class Utilities
 {
     // za staticke funkcije
 
-    public static String[] splitStringWithSeparator(String inputString, String separator)
+    public static String[] splitStringWithSeparator(String inputString)
     {
-        return inputString.split(separator);
+        return inputString.split("/");
 
     }
 
