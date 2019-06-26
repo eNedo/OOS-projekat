@@ -185,7 +185,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
 
     public void setNameOfFile(RandomAccessFile x, String name,long  position) throws IOException
     {
-        x.seek(position+66);
+        x.seek(position+2);
         x.writeUTF(name);
      }
 
@@ -197,71 +197,71 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
 
     public void setsize(RandomAccessFile x, int SIZE,long position) throws IOException
     {
-        x.seek(position+ 86);
+        x.seek(position+ 22);
         x.writeInt(SIZE);
      }
 
     public int getSize(RandomAccessFile x,long position) throws IOException
     {
-        x.seek(position + 86);
+        x.seek(position + 22);
         return x.readInt();
     }
 
     public void setFileFreeForWrite(RandomAccessFile x, byte l,long position) throws IOException
     {
-        x.seek(position+64);
+        x.seek(position);
         x.writeByte(l);
      }
 
     public void setisMFTFILE(RandomAccessFile x, byte l,long position) throws IOException
     {
-        x.seek(position + 65);
+        x.seek(position + 1);
         x.writeByte(l);
      }
 
     public byte isFileFreeForWrite(RandomAccessFile x,long position) throws IOException
     {
-        x.seek(position+ 64);
+        x.seek(position);
          return x.readByte();
     }
 
     public byte getisMFTFILE(RandomAccessFile x,long position) throws IOException
     {
-        x.seek(position  + 65);
+        x.seek(position  +1);
           return x.readByte();
         }
 
     public String getDateLastModified(RandomAccessFile x,long position) throws IOException
     {
 
-        x.seek(position+ 146);
+        x.seek(position+ 82);
           return  x.readUTF();
     }
 
     public String getDateLastUsed(RandomAccessFile x,long position) throws IOException
     {
 
-        x.seek(position + 122);
+        x.seek(position + 58);
         return x.readUTF();
     }
     public String getDateCreated(RandomAccessFile x,long position) throws IOException
     {
-        x.seek(position + 98);
+        x.seek(position + 34);
           return  x.readUTF();
     }
     public void setDateLastModified(RandomAccessFile x, String date,long position) throws IOException
     {
-        x.seek(position + 146);
+        x.seek(position + 82);
         x.writeUTF(date);
      }
     public void setDateLastUsed(RandomAccessFile x, String date,long position) throws IOException
     {
-        x.seek(position + 122);
+        x.seek(position + 58);
         x.writeUTF(date);
      }
     public void setDateCreated(RandomAccessFile x, String date,long position) throws IOException
     {
-        x.seek(position + 98);
+        x.seek(position + 34);
         x.writeUTF(date);
      }
 }
