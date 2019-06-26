@@ -22,4 +22,9 @@ public class Utilities
 
     }
 
+    public static int calculateNumOfBlocks(long numOfBytes)
+    {
+        return (int)Math.ceil((double)numOfBytes/123);
+    }
+
 }
