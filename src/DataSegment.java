@@ -141,26 +141,8 @@ public class DataSegment
         return arrayOfFreeBlocks[0];
     }
 
-    public void readDataFromDataSegment(int numOfBlocks,int startingBlock,byte[] buffeerArray) {
-        try {
-            RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "r");
-            randomAccessFileSystem.seek(MainClass.ONEMB + startingBlock*DataSegmentBlockSize + 1);
-            int nextBlock;
-            for(int i=0;i<numOfBlocks;i++){
-                for(int j=0;j<123;j++) {			
-                    buffeerArray[i] = randomAccessFileSystem.readByte();
-                }	//flush-ovati bafer da bi bio prazan za citanje narednog bloka, mozda u neki privremeni
-                	// fajl ili cak fajl koji se treba snimiti na racunar.. 
-                nextBlock = randomAccessFileSystem.readInt();
-                randomAccessFileSystem.seek(MainClass.ONEMB + nextBlock*DataSegmentBlockSize + 1);
-            }
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public byte[] readDataFromDataSegment1(int numOfBlocks, int startingBlock) // Filip version
+    public byte[] readDataFromDataSegment(int numOfBlocks, int startingBlock) // Filip version
     {
         ArrayList<Byte> buffeerArray = new ArrayList<>();
         try
