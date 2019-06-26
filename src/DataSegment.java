@@ -1,9 +1,12 @@
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
+ 
 
 public class DataSegment
 {
@@ -248,50 +251,36 @@ public class DataSegment
     public int writeDataInDataSegment2(int numOfBlocks, String nameOfFile)
     {
         int[] arrayOfFreeBlocks = findArrayOfFreeBlocks(numOfBlocks);
-
         try (   RandomAccessFile randomAccessFile = new RandomAccessFile(nameOfFile, "r");
                 RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "rw");)
         {
-
-            ArrayList<Byte> buffeerArray = new ArrayList<>();
-            for (int i = 0; i < randomAccessFile.length(); i++)
+            InputStream input=new FileInputStream(new File(nameOfFile));
+        	int counter=0;
+            byte[] myArray=new byte [123];
+             for (int i = 0; i < numOfBlocks; i++)
             {
-                buffeerArray.add(randomAccessFile.readByte());
-            }
-
-            byte[][] myArray=new byte[numOfBlocks][123];
-            for (int i = 0; i < numOfBlocks; i++)
+            	randomAccessFileSystem.seek(MainClass.ONEMB+arrayOfFreeBlocks[i]*128); 
+            for (int j=0;123>j;j++) 
             {
-                myArray[i]=new byte[123];
+             	if(i!=numOfBlocks-1)  myArray[j]=randomAccessFile.readByte(); 
+            	else 
+            		
+                    while (input.read(myArray) != -1) counter++;
+                   
             }
-
-            int k=0;
-            for (int i = 0; i < buffeerArray.size(); k++)
-            {
-                for (int j = 0; j < 123 && i<buffeerArray.size(); j++)
-                {
-                    myArray[k][j]=buffeerArray.get(i++);
-                }
-            }
-
-            for (int i = 0; i < numOfBlocks; i++)
-            {
-                randomAccessFileSystem.seek(MainClass.ONEMB+arrayOfFreeBlocks[i]*DataSegmentBlockSize);
-                randomAccessFileSystem.writeByte((byte)1);
-                for (int j = 0; j < myArray[i].length; j++)
-                {
-                    randomAccessFile.writeByte(myArray[i][j]);
-                }
-                randomAccessFileSystem.writeInt(arrayOfFreeBlocks[i]);
-            }
-
-
+            
+            randomAccessFileSystem.seek(calculatePointerWithBlockNum(arrayOfFreeBlocks[i]));
+            randomAccessFileSystem.writeByte(1); 
+            Arrays.fill(myArray, counter, 123, (byte)32);
+             for(int k=0;123>k;k++) 
+            	randomAccessFileSystem.writeByte(myArray[k]); 
+            randomAccessFileSystem.writeInt(arrayOfFreeBlocks[i]);
+             }
+            return arrayOfFreeBlocks[0]; 
         }catch(Exception ex)
         {
             ex.printStackTrace();
-
         }
-
         return 0;
     }
 
