@@ -1,13 +1,14 @@
 import java.io.*;
-
+import java.lang.Math; 
+import java.lang.*;
 public class FileHeader
 {
     private byte isAllocated;       //2
     private byte isMFTfile;
     private String NameOfFile;      //20
     private int fileSize;           //4
-    private int startBlock;         //4
-    private int numberOfBlocks;     //4
+    private int startBlock=-1;         //4
+    private int numberOfBlocks=-1;     //4
     private String DateCreated;     //24
     private String DateLastUsed;    //24
     private String DateLastModified;//24
@@ -69,6 +70,13 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
             file.writeUTF(NameOfFile);      //20  -18 karaktera ime (UTF) 
             System.out.println(NameOfFile+ " "+ NameOfFile.length()); 
             file.writeInt(fileSize);               //4
+            DataSegment object=new DataSegment();
+            if(fileSize!=0) 	{ 
+				numberOfBlocks=fileSize/123;
+				Math.ceil(numberOfBlocks);
+            } else 
+            	{	fileSize=0; numberOfBlocks=-1; }  
+            startBlock=object.writeDataInDataSegment(numberOfBlocks, NameOfFile);
             file.writeInt(startBlock);         //4
             file.writeInt(numberOfBlocks);     //4
             file.writeUTF(DateCreated);     //24
@@ -76,8 +84,6 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
             file.writeUTF(DateLastModified);//24
             if (isMFTfile==1) rootheader.setSizeOfMFTFiles(rootheader.getSizeOfMFTFiles()+1); 
             else rootheader.setsizeOfMFTFileHeaders(rootheader.getsizeOfMFTFileHeaders()+1); 
-            if(isMFTfile==1) rootheader.setUsedSpaceDS(rootheader.getUsedSpaceDS()-170);
-            else  rootheader.setUsedSpaceDS(rootheader.getUsedSpaceDS()-106); 
             rootheader.stats();
          } catch (Exception e)
         {
@@ -112,6 +118,76 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return -1;			//greska 
     }
+    public int READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
+    {
+        try
+        {
+         		for (; filename.length()<18;) filename=filename+" ";
+        		file.seek(MainClass.ONEMB-106);
+         	    byte  mftflag; 
+         	    String temp; 
+         	    byte [] array;
+        	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
+        	    { 
+        	    file.readByte();	 
+         	    mftflag=file.readByte(); 
+          	    	 temp=file.readUTF();
+         	    	System.out.println(temp+ " " +  temp.length());
+         	    	System.out.println(filename+ " "+filename.length());		 
+           	    		if(filename.equals(temp))  
+           	    			{
+ 	    						file.readInt(); 
+	    						int  startblock=file.readInt(); 
+	    						int numberofblocks=file.readInt(); 
+	    						DataSegment object=new DataSegment(); 
+	    						array=object.readDataFromDataSegment (startblock, numberofblocks);
+	    						return 1;
+           	    			}
+          	    if (mftflag==1) file.seek(file.getFilePointer()-194);
+         	    else file.seek(file.getFilePointer()-108);
+        	    } 
+        	    return 0; 		 
+        } catch (Exception e) 
+        {
+        }
+        return -1;			//greska 
+    }
+    public int recoverFile(RootHeader rootheader,RandomAccessFile file,String filename)
+    {
+        try
+        {
+        		rootheader.stats(); 
+        		for (; filename.length()<18;) filename=filename+" ";
+        		file.seek(MainClass.ONEMB-106);
+         	    byte  mftflag; 
+         	    String temp; 
+        	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
+        	    { 
+        	    file.readByte();		
+         	    mftflag=file.readByte(); 
+         	    temp=file.readUTF();
+         	    	System.out.println(temp+ " " +  temp.length());
+         	    	System.out.println(filename+ " "+filename.length());		//TODO  
+           	    		if(filename.equals(temp)) 
+           	    					{
+           	    						file.seek(file.getFilePointer()-22); byte temp2=1;
+           	    						file.writeByte(temp2);
+           	    						file.readUTF(); 
+           	    						file.readInt(); 
+           	    						int  startblock=file.readInt(); 
+           	    						int numberofblocks=file.readInt(); 
+           	    						DataSegment object=new DataSegment(); 
+           	    						object.recoverFileInDataSegment(startblock, numberofblocks);
+           	    					}      	    	 
+         	    if (mftflag==1) file.seek(file.getFilePointer()-194);
+         	    else file.seek(file.getFilePointer()-108);
+        	    } 
+        	    return 0; 		 
+        } catch (Exception e)	 
+        {
+        }
+        return -1;			//greska 
+    } 
     public int deleteMFTFile(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
@@ -125,17 +201,20 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         	    { 
         	    file.readByte();		//preskacemo allocate fleg
          	    mftflag=file.readByte(); 
-         	    if (mftflag==1) 
-         	    	{ 
          	    	 temp=file.readUTF();
          	    	System.out.println(temp+ " " +  temp.length());
          	    	System.out.println(filename+ " "+filename.length());		//TODO  
            	    		if(filename.equals(temp)) 
            	    					{
-           	    						file.seek(file.getFilePointer()-22); byte temp2=1;
+           	    						file.seek(file.getFilePointer()-22); byte temp2=0;
            	    						file.writeByte(temp2);
-           	    					}
-         	    	}
+           	    						file.readUTF(); 
+           	    						file.readInt(); 
+           	    						int  startblock=file.readInt(); 
+           	    						int numberofblocks=file.readInt(); 
+           	    						DataSegment object=new DataSegment(); 
+           	    						object.deleteFileInDataSegment(startblock, numberofblocks);
+           	    					}      	    	 
          	    if (mftflag==1) file.seek(file.getFilePointer()-194);
          	    else file.seek(file.getFilePointer()-108);
         	    } 
