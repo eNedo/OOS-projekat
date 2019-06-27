@@ -278,11 +278,11 @@ public class MainClass
         System.out.println("Mozete poceti manipulisati sa fajl sistemom.");
         return p;
     }
-public int FollowFilePath(RootHeader rootheader,RandomAccessFile file,String path,int currentposition) throws Exception
+public short  FollowFilePath(RootHeader rootheader,RandomAccessFile file,String path,int currentposition) throws Exception
     { 
       short []temp1 =new short[82];
       short []temp2 =new short[103];
-       int blocknumber;
+       short blocknumber;
       String words[]=path.split("/"); 
      String temp=words[0]+"/"+words[1];
     			blocknumber=DirectoryClass.findDirectoryByPath(file,temp);
@@ -290,13 +290,13 @@ public int FollowFilePath(RootHeader rootheader,RandomAccessFile file,String pat
     				{   		
     				file.seek(DirectoryClass.calculatePointerWithBlockNum((short)blocknumber)); 
     				temp2=DirectoryClass.getArrayOfDirsAndFiles(file); 
-    				for (int i=0;103>i;i++) if (words[2].equals(FileHeader.searchFileHeaderBYPosition(rootheader, file, temp2[i]))) { return Math.abs(temp2[i]); break;} 
+    				for (int i=0;103>i;i++) if (words[2].equals(FileHeader.searchFileHeaderBYPosition(rootheader, file, temp2[i]))) { return (short)Math.abs(temp2[i]); break;} 
     				}
     			else 
     			{
     				file.seek(DirectoryClass.calculatePointerWithBlockNum((short)blocknumber)); 
     				temp1=DirectoryClass.getArrayOfDirsAndFiles(file);
-    				for(int i=0; 82>i;i++) if (words[2].equals(FileHeader.searchFileHeaderBYPosition(rootheader,file,temp1[i]))) { return Math.abs(temp1[i]); break;}
+    				for(int i=0; 82>i;i++) if (words[2].equals(FileHeader.searchFileHeaderBYPosition(rootheader,file,temp1[i]))) { return (short)Math.abs(temp1[i]); break;}
     			}
     			return -1; //greska
     }
