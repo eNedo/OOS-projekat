@@ -27,7 +27,7 @@ public class FileHeader
         if (isMFTfile == 1) DataBlock = datablocks;
     }
 
-    public int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String ojsa)
+    public  int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String ojsa)
     {
         try
         {
@@ -97,7 +97,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         {}
  return 0; 
     }
-    public int searchMFTfiles(RootHeader rootheader,RandomAccessFile file,String filename)
+    public static int searchMFTfiles(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
         {
@@ -145,11 +145,21 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
           	    file.readByte(); 
           	    return file.readUTF(); 
           	   
-          } catch (Exception e)	// 1-fajl pronadjen
+          } catch (Exception e)	
           {}
     	  return null; 
     }
-    public byte [] READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
+	public void printFileInfo() {
+		System.out.println("Da li je fajl alociran na memoriji: " + ((isAllocated==1)?"jeste":"nije"));
+		System.out.println("Da li je fajl MFT fajl: " + ((isMFTfile==1)?"jeste":"nije"));
+		System.out.println("Ime fajla: " + NameOfFile);
+		System.out.println("Veličina fajla: " + fileSize);
+		System.out.println("Datum kreacije: " + DateCreated);
+		System.out.println("Datum kada je posljednje korišten: " + DateLastUsed);
+		System.out.println("Datum kada je posljednje modifikovan: " + DateLastModified);
+	}
+
+    public  byte [] READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
         {
@@ -190,17 +200,6 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return null; 
     }
-
-	public void printFileInfo() {
-		System.out.println("Da li je fajl alociran na memoriji: " + ((isAllocated==1)?"jeste":"nije"));
-		System.out.println("Da li je fajl MFT fajl: " + ((isMFTfile==1)?"jeste":"nije"));
-		System.out.println("Ime fajla: " + NameOfFile);
-		System.out.println("Veličina fajla: " + fileSize);
-		System.out.println("Datum kreacije: " + DateCreated);
-		System.out.println("Datum kada je posljednje korišten: " + DateLastUsed);
-		System.out.println("Datum kada je posljednje modifikovan: " + DateLastModified);
-	}
-
     public int recoverFile(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
@@ -235,9 +234,9 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         } catch (Exception e)	 
         {
         }
-        return -1;			//greska 
+        return -1;			
     } 
-    public void deleteMFTFile(RootHeader rootheader,RandomAccessFile file,int position)
+    public  static void deleteMFTFile(RootHeader rootheader,RandomAccessFile file,int position)
     {
         try
         {
@@ -264,7 +263,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         {}
           
     }
-    public long getFileHeaderPosition(RootHeader rootheader,RandomAccessFile file,String filename)
+    public   long getFileHeaderPosition(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
         {
@@ -296,89 +295,89 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return -1;			//greska 
     }
-    public void getDataFromFile(RandomAccessFile x, byte[] temp, long  position) throws IOException
+    public static  void getDataFromFile(RandomAccessFile x, byte[] temp, long  position) throws IOException
     {
     	x.seek(position);
         x.read(temp);
      }
 
-    public void setNameOfFile(RandomAccessFile x, String name,long  position) throws IOException
+    public static void setNameOfFile(RandomAccessFile x, String name,long  position) throws IOException
     {
         x.seek(position+2);
         x.writeUTF(name);
      }
 
-    public String getNameOfFile(RandomAccessFile x,long position) throws IOException
+    public static  String getNameOfFile(RandomAccessFile x,long position) throws IOException
     {
         x.seek(position + 2);
          return   x.readUTF();
     }
 
-    public void setsize(RandomAccessFile x, int SIZE,long position) throws IOException
+    public static  void setsize(RandomAccessFile x, int SIZE,long position) throws IOException
     {
         x.seek(position+ 22);
         x.writeInt(SIZE);
      }
 
-    public int getSize(RandomAccessFile x,long position) throws IOException
+    public static int getSize(RandomAccessFile x,long position) throws IOException
     {
         x.seek(position + 22);
         return x.readInt();
     }
 
-    public void setFileFreeForWrite(RandomAccessFile x, byte l,long position) throws IOException
+    public static void setFileFreeForWrite(RandomAccessFile x, byte l,long position) throws IOException
     {
         x.seek(position);
         x.writeByte(l);
      }
 
-    public void setisMFTFILE(RandomAccessFile x, byte l,long position) throws IOException
+    public static void setisMFTFILE(RandomAccessFile x, byte l,long position) throws IOException
     {
         x.seek(position + 1);
         x.writeByte(l);
      }
 
-    public byte isFileFreeForWrite(RandomAccessFile x,long position) throws IOException
+    public static byte isFileFreeForWrite(RandomAccessFile x,long position) throws IOException
     {
         x.seek(position);
          return x.readByte();
     }
 
-    public byte getisMFTFILE(RandomAccessFile x,long position) throws IOException
+    public static  byte getisMFTFILE(RandomAccessFile x,long position) throws IOException
     {
         x.seek(position  +1);
           return x.readByte();
         }
 
-    public String getDateLastModified(RandomAccessFile x,long position) throws IOException
+    public static  String getDateLastModified(RandomAccessFile x,long position) throws IOException
     {
 
         x.seek(position+ 82);
           return  x.readUTF();
     }
 
-    public String getDateLastUsed(RandomAccessFile x,long position) throws IOException
+    public static String getDateLastUsed(RandomAccessFile x,long position) throws IOException
     {
 
         x.seek(position + 58);
         return x.readUTF();
     }
-    public String getDateCreated(RandomAccessFile x,long position) throws IOException
+    public static String getDateCreated(RandomAccessFile x,long position) throws IOException
     {
         x.seek(position + 34);
           return  x.readUTF();
     }
-    public void setDateLastModified(RandomAccessFile x, String date,long position) throws IOException
+    public static void setDateLastModified(RandomAccessFile x, String date,long position) throws IOException
     {
         x.seek(position + 82);
         x.writeUTF(date);
      }
-    public void setDateLastUsed(RandomAccessFile x, String date,long position) throws IOException
+    public static void setDateLastUsed(RandomAccessFile x, String date,long position) throws IOException
     {
         x.seek(position + 58);
         x.writeUTF(date);
      }
-    public void setDateCreated(RandomAccessFile x, String date,long position) throws IOException
+    public static void setDateCreated(RandomAccessFile x, String date,long position) throws IOException
     {
         x.seek(position + 34);
         x.writeUTF(date);
