@@ -118,7 +118,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return -1;			//greska 
     }
-    public int READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
+    public byte [] READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
         {
@@ -126,7 +126,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         		file.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
          	    String temp; 
-         	    byte [] array;
+         	    byte [] array=new byte[64];
         	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
         	    { 
         	    file.readByte();	 
@@ -134,23 +134,29 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
           	    	 temp=file.readUTF();
          	    	System.out.println(temp+ " " +  temp.length());
          	    	System.out.println(filename+ " "+filename.length());		 
-           	    		if(filename.equals(temp))  
+           	    		if(filename.equals(temp))  //citanje obicnog (data) fajla 
            	    			{
  	    						file.readInt(); 
 	    						int  startblock=file.readInt(); 
 	    						int numberofblocks=file.readInt(); 
 	    						DataSegment object=new DataSegment(); 
 	    						array=object.readDataFromDataSegment (startblock, numberofblocks);
-	    						return 1;
+	    						return array;
+           	    			}
+           	    if (filename.equals(temp) && mftflag==1) //citanje mft fajla 
+           	    			{ 
+            	    			file.seek(file.getFilePointer()-86);
+           	    				file.read(array);
+           	    				return array;
            	    			}
           	    if (mftflag==1) file.seek(file.getFilePointer()-194);
          	    else file.seek(file.getFilePointer()-108);
         	    } 
-        	    return 0; 		 
+        	    return null; 		 
         } catch (Exception e) 
         {
         }
-        return -1;			//greska 
+        return null; 
     }
     public int recoverFile(RootHeader rootheader,RandomAccessFile file,String filename)
     {
