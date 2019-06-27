@@ -56,20 +56,23 @@ public class DirectoryClass
                 randomAccessFile.seek(calculatePointerWithBlockNum((short) directoryBlockNum));
                 setIsAllocatedFlag(randomAccessFile, (byte) 0);
 
-                short[] arrayOfDirsAndFiles = RootHeader.getArrayOfDirs();
-
+                short[] arrayOfDirsAndFiles = DirectoryClass.getArrayOfDirsAndFiles(randomAccessFile);
 
                 for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
                 {
                     if (arrayOfDirsAndFiles[i] == (short) 32555)
                         continue;
-                    else if (arrayOfDirsAndFiles[i] > 0)
+                    else if (arrayOfDirsAndFiles[i] > 0 && arrayOfDirsAndFiles[i]<20000)
+                    {
                         deleteDirectory(arrayOfDirsAndFiles[i], rootHeader);
-                    else if (arrayOfDirsAndFiles[i] < 0)
+                        arrayOfDirsAndFiles[i]+=20000;
+                    }
+                    else if (arrayOfDirsAndFiles[i] < 0 && arrayOfDirsAndFiles[i]>-20000)
+                    {
                         FileHeader.deleteMFTFile(rootHeader, randomAccessFile, Math.abs(arrayOfDirsAndFiles[i]));
-
+                        arrayOfDirsAndFiles[i]-=20000;
+                    }
                 }
-
 
             }
         } catch (Exception ex)
@@ -137,31 +140,45 @@ public class DirectoryClass
     }
 
 
-    public static short findDirectoryByName(RandomAccessFile randomAccessFile, String name) throws IOException
+    public static short findDirectoryByPath(RandomAccessFile randomAccessFile, String path) throws IOException
     {
         // long previousPointerPosition = randomAccessFile.getFilePointer();
         // TODO: nisam vise siguran u ovaj zivot. Nije GOTOVO!
         short[] tempArrayOfDirsAndFiles;
-        if ("root".contains(name))  //apsolutna putanja
+        String[] pathArray = path.split("/");
+
+        if ("root".equals(pathArray[0]))  //apsolutna putanja
         {
             //  npr: root/dir1  pathArray[0] == root i pathArray[1]==dir1
-            String[] pathArray = name.split("/");
             tempArrayOfDirsAndFiles = RootHeader.getArrayOfDirs();
 
             String readName;
-            for (int i = 0; i < 103; i++)
+            for (int i = 1; i <pathArray.length ; i++)
             {
-                if (tempArrayOfDirsAndFiles[i] == 32555)
-                    continue;
 
-                randomAccessFile.seek(calculatePointerWithBlockNum(tempArrayOfDirsAndFiles[i]));
-                readName = DirectoryClass.getNameOfDirectory(randomAccessFile);
+                for (int j = 0; j < tempArrayOfDirsAndFiles.length; j++)
+                {
+                    if (tempArrayOfDirsAndFiles[j]>=20000)
+                        continue;
 
-                if (pathArray[1].equals(readName))
-                    return tempArrayOfDirsAndFiles[i];
+                    randomAccessFile.seek(calculatePointerWithBlockNum(tempArrayOfDirsAndFiles[j]));
+                    readName = DirectoryClass.getNameOfDirectory(randomAccessFile);
+
+                    if( i+1==pathArray.length && pathArray[i].equals(readName))
+                    {
+                        return tempArrayOfDirsAndFiles[j];
+                    }
+                    else if(pathArray[j].equals(readName))
+                    {
+                        tempArrayOfDirsAndFiles=DirectoryClass.getArrayOfDirsAndFiles(randomAccessFile);
+                        break;
+                    }
+
+                }
             }
         } else
         {
+
 
         }
         return 0;
