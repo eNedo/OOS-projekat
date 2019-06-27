@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="OOS-projekat:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/DirectoryClass.java" line="98" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0a4ac700-fe4a-4f98-852f-416d169f5b68" name="Default Changelist" comment="datasegment findFirstFreeSpace function">
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/OOS_projekat_jar/OOS-projekat.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/OOS_projekat_jar/Operativni Sistem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/OOS-projekat/META-INF/OOS-projekat.kotlin_module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FileHeader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileHeader.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/DataSegmentTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/RootHeaderTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="131">
+              <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FileHeader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="463">
+              <caret line="78" column="52" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/DataSegment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-68">
+              <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/DirectoryClassTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="14" column="27" selection-start-line="12" selection-start-column="8" selection-end-line="14" selection-end-column="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/jdk-12.0.1/lib/src.zip!/java.base/java/io/RandomAccessFile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="11645">
+              <caret line="712" selection-start-line="712" selection-end-line="712" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/RootHeader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1105">
+              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/FILESYSTEM">
+          <provider selected="true" editor-type-id="LargeFileEditor">
+            <state relative-caret-position="153">
+              <caret line="2" column="1048423" selection-start-line="2" selection-start-column="1048423" selection-end-line="2" selection-end-column="1048423" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Konceptualni plan">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="558">
+              <caret line="218" column="87" selection-start-line="218" selection-start-column="87" selection-end-line="218" selection-end-column="87" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nedodjija.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="155" selection-start-column="155" selection-end-column="155" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit4 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>81</find>
+      <find>name</find>
+      <find>mkdir</find>
+      <find>arrayOfDirs</find>
+      <find>set</find>
+      <find>setA</find>
+      <find>new short</find>
+      <find>getar</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/MFT.java" />
+        <option value="$PROJECT_DIR$/src/Util.java" />
+        <option value="$PROJECT_DIR$/src/FILEHeader.java" />
+        <option value="$PROJECT_DIR$/src/FileClass.java" />
+        <option value="$PROJECT_DIR$/Konceptualni plan" />
+        <option value="$PROJECT_DIR$/src/FileHeaderRoot.java" />
+        <option value="$PROJECT_DIR$/src/FileData.java" />
+        <option value="$PROJECT_DIR$/src/MainClass.java" />
+        <option value="$PROJECT_DIR$/tests/DirectoryClassTest.java" />
+        <option value="$PROJECT_DIR$/src/RootHeader.java" />
+        <option value="$PROJECT_DIR$/src/DirectoryClass.java" />
+        <option value="$PROJECT_DIR$/tests/TestTest.java" />
+        <option value="$PROJECT_DIR$/src/Utilities.java" />
+        <option value="$PROJECT_DIR$/tests/RootHeaderTest.java" />
+        <option value="$PROJECT_DIR$/tests/DataSegmentTest.java" />
+        <option value="$PROJECT_DIR$/nedodjija.txt" />
+        <option value="$PROJECT_DIR$/src/FileHeader.java" />
+        <option value="$PROJECT_DIR$/src/DataSegment.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="683" />
+    <option name="height" value="740" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="OOS-projekat" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="OOS-projekat" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="OOS-projekat" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="OOS-projekat" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="OOS-projekat" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="OOS-projekat" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="tests" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="true" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.DataSegmentTest.prepairDataSegment">
+    <configuration name="DataSegmentTest.prepairDataSegment" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="OOS-projekat" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="DataSegmentTest" />
+      <option name="METHOD_NAME" value="prepairDataSegment" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DirectoryClassTest.getIsAllocatedFlag" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="OOS-projekat" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="DirectoryClassTest" />
+      <option name="METHOD_NAME" value="getIsAllocatedFlag" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RootHeaderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="OOS-projekat" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="RootHeaderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RootHeaderTest.rootHeaderTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="OOS-projekat" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="RootHeaderTest" />
+      <option name="METHOD_NAME" value="rootHeaderTests" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="OOS-projekat" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.DataSegmentTest.prepairDataSegment" />
+        <item itemvalue="JUnit.DirectoryClassTest.getIsAllocatedFlag" />
+        <item itemvalue="JUnit.TestTest.test" />
+        <item itemvalue="JUnit.RootHeaderTest" />
+        <item itemvalue="JUnit.RootHeaderTest.rootHeaderTests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0a4ac700-fe4a-4f98-852f-416d169f5b68" name="Default Changelist" comment="" />
+      <created>1559495640971</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1559495640971</updated>
+      <workItem from="1559495645074" duration="1118000" />
+      <workItem from="1559496856640" duration="820000" />
+      <workItem from="1559731365130" duration="373000" />
+      <workItem from="1559757035755" duration="3289000" />
+      <workItem from="1559845148637" duration="357000" />
+      <workItem from="1560023041825" duration="3599000" />
+      <workItem from="1560109503156" duration="267000" />
+      <workItem from="1560239002576" duration="649000" />
+      <workItem from="1560239689600" duration="326000" />
+      <workItem from="1560240056622" duration="1026000" />
+      <workItem from="1560241546600" duration="2118000" />
+      <workItem from="1560244305978" duration="9292000" />
+      <workItem from="1560273579981" duration="5390000" />
+      <workItem from="1560280311853" duration="7195000" />
+      <workItem from="1560322395184" duration="541000" />
+      <workItem from="1560365916560" duration="89000" />
+      <workItem from="1560583234366" duration="2486000" />
+      <workItem from="1560586210371" duration="19482000" />
+      <workItem from="1560619883802" duration="136000" />
+      <workItem from="1560620099607" duration="18000" />
+      <workItem from="1560795541394" duration="10016000" />
+      <workItem from="1560875654222" duration="6458000" />
+      <workItem from="1560939613747" duration="2198000" />
+      <workItem from="1560941886593" duration="1066000" />
+      <workItem from="1560975068904" duration="3601000" />
+      <workItem from="1561024886483" duration="1673000" />
+      <workItem from="1561061905135" duration="2748000" />
+      <workItem from="1561066107410" duration="580000" />
+      <workItem from="1561130281789" duration="71000" />
+      <workItem from="1561395366547" duration="332000" />
+      <workItem from="1561395875292" duration="8797000" />
+      <workItem from="1561405498356" duration="487000" />
+      <workItem from="1561457699914" duration="127000" />
+      <workItem from="1561463341049" duration="709000" />
+      <workItem from="1561464085521" duration="13326000" />
+      <workItem from="1561477941481" duration="29000" />
+      <workItem from="1561489976203" duration="4920000" />
+      <workItem from="1561495027572" duration="1880000" />
+      <workItem from="1561537189418" duration="19330000" />
+      <workItem from="1561576765274" duration="2583000" />
+      <workItem from="1561619491498" duration="5739000" />
+    </task>
+    <task id="LOCAL-00001" summary="first test commit!">
+      <created>1559497061151</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1559497061152</updated>
+    </task>
+    <task id="LOCAL-00002" summary="first test commit!">
+      <created>1559497415956</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1559497415956</updated>
+    </task>
+    <task id="LOCAL-00003" summary="uzimanje komandi sa konzole">
+      <created>1559760590548</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1559760590549</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added Utilities Class and cleaning up">
+      <created>1560026566235</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1560026566235</updated>
+    </task>
+    <task id="LOCAL-00005" summary="testing fileclass input">
+      <created>1560246359809</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1560246359809</updated>
+    </task>
+    <task id="LOCAL-00006" summary="first test commit!">
+      <created>1560251385196</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1560251385196</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added .iml">
+      <created>1560274278027</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1560274278027</updated>
+    </task>
+    <task id="LOCAL-00008" summary="regex for command arguments">
+      <created>1560279859957</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1560279859957</updated>
+    </task>
+    <task id="LOCAL-00009" summary="datasegment findFirstFreeSpace function">
+      <created>1560288428986</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1560288428986</updated>
+    </task>
+    <task id="LOCAL-00010" summary="FileHeaderRoot">
+      <created>1560591842454</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1560591842454</updated>
+    </task>
+    <task id="LOCAL-00011" summary="DirectoryClass modiefied">
+      <created>1560598625853</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1560598625853</updated>
+    </task>
+    <task id="LOCAL-00012" summary="DirectoryClass modified get and set blockNumber">
+      <created>1560603377928</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1560603377928</updated>
+    </task>
+    <task id="LOCAL-00013" summary="datasegment findFirstFreeSpace function">
+      <created>1560608615625</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1560608615625</updated>
+    </task>
+    <task id="LOCAL-00014" summary="debug of rootHeader, fixed everything">
+      <created>1560805504744</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1560805504744</updated>
+    </task>
+    <task id="LOCAL-00015" summary="finish debuging DirectoryClass&#10;rootHeader size = 347 (umjesto 350)&#10;Directory size = 255 (ali je arrayOfDirs sad 82 umjesto 81)">
+      <created>1560881850204</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1560881850204</updated>
+    </task>
+    <task id="LOCAL-00016" summary="direcotryClass try to make findBlock funcktion">
+      <created>1560978553503</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1560978553503</updated>
+    </task>
+    <task id="LOCAL-00017" summary="calculate blockNum&#10;find last position of directory header&#10;few modifications">
+      <created>1561066671530</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1561066671530</updated>
+    </task>
+    <task id="LOCAL-00018" summary="create new Directory and minor upgrades">
+      <created>1561405969792</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1561405969792</updated>
+    </task>
+    <task id="LOCAL-00019" summary="DataSegment: delete, recover, findblock, prepareDataSegment">
+      <created>1561474889930</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1561474889931</updated>
+    </task>
+    <task id="LOCAL-00020" summary="vracanje nedinog koda">
+      <created>1561477200943</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1561477200943</updated>
+    </task>
+    <task id="LOCAL-00021" summary="debuging DataSegment">
+      <created>1561496187330</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1561496187330</updated>
+    </task>
+    <task id="LOCAL-00022" summary="update DataSegment">
+      <created>1561496887396</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1561496887396</updated>
+    </task>
+    <task id="LOCAL-00023" summary="datasegment findFirstFreeSpace function">
+      <created>1561537527505</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1561537527505</updated>
+    </task>
+    <task id="LOCAL-00024" summary="writedataindatasegment">
+      <created>1561551052383</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1561551052383</updated>
+    </task>
+    <task id="LOCAL-00025" summary="read and write data in data segment">
+      <created>1561624583464</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1561624583464</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 19m 41s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 19m 55s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 20m 04s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 21m 10s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 25m 05s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 26m 15s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 27m 46s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 29m 08s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 30m 37s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="DataSegmentTest_prepairDataSegment - 2019.06.27 at 10h 31m 06s.xml">
+      <configuration name="DataSegmentTest.prepairDataSegment" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="145241000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-3" y="0" width="1372" height="743" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23454952" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3296875" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49853587" weight="0.70016205" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39708266" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32901135" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5014641" side_tool="true" weight="0.32090762" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32252836" />
+      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4996277" weight="0.3306321" />
+      <window_info anchor="bottom" id="Statistic" order="12" weight="0.60940033" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Palette&#9;" order="4" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="uzimanje komandi sa konzole" />
+    <MESSAGE value="added Utilities Class and cleaning up" />
+    <MESSAGE value="testing fileclass input" />
+    <MESSAGE value="added .iml" />
+    <MESSAGE value="regex for command arguments" />
+    <MESSAGE value="first test commit!" />
+    <MESSAGE value="FileHeaderRoot" />
+    <MESSAGE value="DirectoryClass modiefied" />
+    <MESSAGE value="DirectoryClass modified get and set blockNumber" />
+    <MESSAGE value="debug of rootHeader, fixed everything" />
+    <MESSAGE value="finish debuging DirectoryClass&#10;rootHeader size = 347 (umjesto 350)&#10;Directory size = 255 (ali je arrayOfDirs sad 82 umjesto 81)" />
+    <MESSAGE value="direcotryClass try to make findBlock funcktion" />
+    <MESSAGE value="calculate blockNum&#10;find last position of directory header&#10;few modifications" />
+    <MESSAGE value="create new Directory and minor upgrades" />
+    <MESSAGE value="DataSegment: delete, recover, findblock, prepareDataSegment" />
+    <MESSAGE value="vracanje nedinog koda" />
+    <MESSAGE value="debuging DataSegment" />
+    <MESSAGE value="update DataSegment" />
+    <MESSAGE value="datasegment findFirstFreeSpace function" />
+    <MESSAGE value="writedataindatasegment" />
+    <MESSAGE value="read and write data in data segment" />
+    <option name="LAST_COMMIT_MESSAGE" value="read and write data in data segment" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/tests/DataSegmentTest.java</url>
+          <line>28</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/tests/DataSegmentTest.java</url>
+          <line>31</line>
+          <properties />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="arrayOfFreeBlocks" language="JAVA" />
+        <watch expression="myArray" language="JAVA" />
+        <watch expression="buffeerArray" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>array</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>myArray</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>buffeerArray</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arrayOfFreeBlocks</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arra</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>currentPointerPosition</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>directoryClass</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>tempPosition</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>temp</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>formatter</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/.idea/uiDesigner.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+    <entry file="jar:///usr/lib/jvm/jdk-12.0.1/lib/src.zip!/java.base/java/io/ObjectOutput.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OOS-projekat.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MainClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="20" column="41" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FileData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="28" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MFT.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Utilities.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="54" selection-start-line="26" selection-start-column="54" selection-end-line="26" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#635#636#0" expanded="true" />
+            <element signature="e#702#703#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DirectoryClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4607">
+          <caret line="272" column="16" selection-start-line="272" selection-start-column="16" selection-end-line="272" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/TestTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="17" column="64" selection-start-line="17" selection-start-column="64" selection-end-line="17" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/jdk-12.0.1/lib/src.zip!/java.base/java/io/RandomAccessFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11645">
+          <caret line="712" selection-start-line="712" selection-end-line="712" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/RootHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1105">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/RootHeaderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/DirectoryClassTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="14" column="27" selection-start-line="12" selection-start-column="8" selection-end-line="14" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FILESYSTEM">
+      <provider editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="LargeFileEditor">
+        <state relative-caret-position="153">
+          <caret line="2" column="1048423" selection-start-line="2" selection-start-column="1048423" selection-end-line="2" selection-end-column="1048423" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Konceptualni plan">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="218" column="87" selection-start-line="218" selection-start-column="87" selection-end-line="218" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nedodjija.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="155" selection-start-column="155" selection-end-column="155" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/DataSegmentTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FileHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="78" column="52" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataSegment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-68">
+          <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>OOS-projekat:jar</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>javafx-swt</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>12.0.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>OOS-projekat</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
