@@ -23,7 +23,6 @@ public class DataSegment
         int currentBlock = startBlock;
         try (RandomAccessFile randomAceesFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
-
             do
             {
                 randomAceesFile.seek(calculatePointerWithBlockNum(startBlock));
@@ -164,7 +163,7 @@ public class DataSegment
 
 
 
-    public void writeDataInDataSegment(int numOfBlocks, String nameOfOutputFile) // Filip version
+    public int writeDataInDataSegment(int numOfBlocks, String nameOfOutputFile) // Filip version
     {
         int[] arrayOfFreeBlocks = findArrayOfFreeBlocks(numOfBlocks);
         byte[] outputArray;
@@ -205,7 +204,7 @@ public class DataSegment
         {
             ex.printStackTrace();
         }
-
+        return arrayOfFreeBlocks[0];
 
     }
 
