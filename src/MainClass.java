@@ -278,8 +278,6 @@ public class MainClass
         System.out.println("Mozete poceti manipulisati sa fajl sistemom.");
         return p;
     }
-
-}
 public int FollowFilePath(RootHeader rootheader,RandomAccessFile file,String path,int currentposition) throws Exception
     { 
       short []temp1 =new short[82];
@@ -302,3 +300,4 @@ public int FollowFilePath(RootHeader rootheader,RandomAccessFile file,String pat
     			}
     			return -1; //greska
     }
+}
