@@ -13,7 +13,7 @@ public class RootHeader
 
     private String nameOfFileSystem = "";    //16    == 14 + \0
     private int sizeOfMFTFiles;     //16
-    private int sizeOfMFTDirs;      //20
+    private int sizeOfMFTFileHeaders;      //20
     private long freeSpaceDS;           //24
     private long usedSpaceDS;           //32
     private String dateCreated;         //40
@@ -35,19 +35,19 @@ public class RootHeader
     public RootHeader(String name)
     {
         //TODO: NE DIRAJ MOJE! filip
-//
-//        for (; name.length()<14;) name=name+ " ";
-//        System.out.println(name + " " + name.length());
-        nameOfFileSystem = String.format("%-14s", name);
+
+        for (; name.length()<14;) name=name+ " ";
+        System.out.println(name + " " + name.length());
+        nameOfFileSystem = name;
         lastUsed = dateCreated = lastModified = Utilities.getCurrentDate();
         numberOfDirectoriums = 0;
         numberOfFiles = 0;
         freeSpaceDS = 19 * MainClass.ONEMB;
         usedSpaceDS = 0;
         sizeOfMFTFiles = 0;
-        sizeOfMFTDirs = 0;
+        sizeOfMFTFileHeaders = 0;
         arrayOfDirs= new short[103];
-        Arrays.fill(arrayOfDirs,(short)32555);
+        Arrays.fill(arrayOfDirs,(short)32555);  // dodao filip
         this.writeFileHeader();
 
     }
@@ -59,7 +59,7 @@ public class RootHeader
         	randomAccessFile.seek(0); 
         	nameOfFileSystem=randomAccessFile.readUTF();
         	sizeOfMFTFiles= randomAccessFile.readInt();
-        	sizeOfMFTDirs =randomAccessFile.readInt();
+        	sizeOfMFTFileHeaders =randomAccessFile.readInt();
         	freeSpaceDS=randomAccessFile.readLong();
         	usedSpaceDS=randomAccessFile.readLong();
         	dateCreated=randomAccessFile.readUTF();
@@ -81,7 +81,7 @@ public class RootHeader
         {
             randomAccessFile.writeUTF(nameOfFileSystem);
             randomAccessFile.writeInt(sizeOfMFTFiles);
-            randomAccessFile.writeInt(sizeOfMFTDirs);
+            randomAccessFile.writeInt(sizeOfMFTFileHeaders);
             randomAccessFile.writeLong(freeSpaceDS);
             randomAccessFile.writeLong(usedSpaceDS);
             randomAccessFile.writeUTF(dateCreated);
@@ -109,10 +109,8 @@ public class RootHeader
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
             randomAccessFile.seek(16);
-            int temp=randomAccessFile.readInt(); 
-            randomAccessFile.close();
-            return (temp);
-        } catch (Exception ex)
+            return (this.sizeOfMFTFiles = randomAccessFile.readInt());         
+            } catch (Exception ex)
         {
             ex.printStackTrace();
         }
@@ -134,12 +132,12 @@ public class RootHeader
 
     }
 
-    public int getSizeOfMFTDirs()
+    public int getsizeOfMFTFileHeaders()
     {
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
             randomAccessFile.seek(20);
-            return (this.sizeOfMFTDirs = randomAccessFile.readInt());
+            return (this.sizeOfMFTFileHeaders = randomAccessFile.readInt());
 
         } catch (Exception ex)
         {
@@ -149,9 +147,9 @@ public class RootHeader
 
     }
 
-    public void setSizeOfMFTDirs(int sizeOfMFTDirs)
+    public void setsizeOfMFTFileHeaders(int sizeOfMFTDirs)
     {
-        this.sizeOfMFTDirs = sizeOfMFTDirs;
+        this.sizeOfMFTFileHeaders = sizeOfMFTDirs;
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))
         {
             randomAccessFile.seek(20);
