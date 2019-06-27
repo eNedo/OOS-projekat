@@ -190,6 +190,17 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return null; 
     }
+
+	public void printFileInfo() {
+		System.out.println("Da li je fajl alociran na memoriji: " + ((isAllocated==1)?"jeste":"nije"));
+		System.out.println("Da li je fajl MFT fajl: " + ((isMFTfile==1)?"jeste":"nije"));
+		System.out.println("Ime fajla: " + NameOfFile);
+		System.out.println("Veličina fajla: " + fileSize);
+		System.out.println("Datum kreacije: " + DateCreated);
+		System.out.println("Datum kada je posljednje korišten: " + DateLastUsed);
+		System.out.println("Datum kada je posljednje modifikovan: " + DateLastModified);
+	}
+
     public int recoverFile(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try

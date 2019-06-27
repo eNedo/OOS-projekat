@@ -132,6 +132,14 @@ public class RootHeader
 
     }
 
+    public void updateDeletedDirectorium() {
+        numberOfDirectoriums--;
+    }
+
+    public void updateWrittenDirectorium() {
+        numberOfDirectoriums++;
+    }
+
     public int getsizeOfMFTFileHeaders()
     {
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath, "rw"))

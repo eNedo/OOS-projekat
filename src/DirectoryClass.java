@@ -134,6 +134,19 @@ public class DirectoryClass
                 getSize(randomAccessFile), getArrayOfDirsAndFiles(randomAccessFile));
     }
 
+    public void writeFileInDirectory(String fileName) {
+        int i  = 0;
+        while(i < 82) {
+            if((arrayOfDirsAndFiles[i])<20000 || arrayOfDirsAndFiles[i] == 32555) {
+                arrayOfDirsAndFiles[i] = -createFileHeader(fileName);
+                break;
+            }
+            i++;
+        }
+        if(i >=82)
+            System.out.println("Ne mozete kreirati fajl");
+    }
+
     public static byte getIsAllocatedFlag(RandomAccessFile randomAccessFile) throws IOException
     {
         //        this.isAllocatedFlag = randomAccessFile.readByte();
