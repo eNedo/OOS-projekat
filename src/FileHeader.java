@@ -27,10 +27,11 @@ public class FileHeader
         if (isMFTfile == 1) DataBlock = datablocks;
     }
 
-    public int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file)
+    public int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String ojsa)
     {
         try
         {
+        	NameOfFile=ojsa;
         	int helpcounter=0;
         	file.seek(MainClass.ONEMB-106);
         	int maincounter=0;
@@ -171,7 +172,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
 	    						int  startblock=file.readInt(); 
 	    						int numberofblocks=file.readInt(); 
 	    						DataSegment object=new DataSegment(); 
-	    						array=object.readDataFromDataSegment (startblock, numberofblocks);
+	    						array=object.readDataFromDataSegment (startblock, numberofblocks, (int)fileSize);
 	    						return array;
            	    			}
            	    if (filename.equals(temp) && mftflag==1) //citanje mft fajla 
@@ -225,42 +226,32 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return -1;			//greska 
     } 
-    public int deleteMFTFile(RootHeader rootheader,RandomAccessFile file,String filename)
+    public void deleteMFTFile(RootHeader rootheader,RandomAccessFile file,int position)
     {
         try
         {
-        		rootheader.stats(); 
-        		for (; filename.length()<18;) filename=filename+" ";
-        		file.seek(MainClass.ONEMB-106);
+         		file.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
-         	    String temp; 
-        	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
+         	    for(int i=position;i>0;i--)
         	    { 
-        	    file.readByte();		//preskacemo allocate fleg
-         	    mftflag=file.readByte(); 
-         	    	 temp=file.readUTF();
-         	    	System.out.println(temp+ " " +  temp.length());
-         	    	System.out.println(filename+ " "+filename.length());		//TODO  
-           	    		if(filename.equals(temp)) 
-           	    					{
-           	    						file.seek(file.getFilePointer()-22); byte temp2=0;
-           	    						file.writeByte(temp2);
-           	    						file.readUTF(); 
-           	    						file.readInt(); 
-           	    						int  startblock=file.readInt(); 
-           	    						int numberofblocks=file.readInt(); 
-           	    						
-           	    						DataSegment object=new DataSegment(); 
-           	    						object.deleteFileInDataSegment(startblock, numberofblocks);
-           	    					}      	    	 
+        	    file.readByte();		 
+         	    mftflag=file.readByte();  	    	 
          	    if (mftflag==1) file.seek(file.getFilePointer()-194);
          	    else file.seek(file.getFilePointer()-108);
         	    } 
-        	    return 0; 		// 0-fajl nije pronadjen
-        } catch (Exception e)	// 1-fajl pronadjen
-        {
-        }
-        return -1;			//greska 
+         	    	file.seek(file.getFilePointer()-22);
+         	    	byte temp2=0;
+					file.writeByte(temp2);
+					file.readUTF(); 
+					int size=file.readInt(); 
+					int  startblock=file.readInt(); 
+					int numberofblocks=file.readInt(); 	
+					if (size>64) {
+					DataSegment object=new DataSegment(); 
+					object.deleteFileInDataSegment(startblock, numberofblocks); }
+        } catch (Exception e)	 
+        {}
+          
     }
     public long getFileHeaderPosition(RootHeader rootheader,RandomAccessFile file,String filename)
     {
