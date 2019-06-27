@@ -42,6 +42,35 @@ public class DirectoryClass
         this.arrayOfDirsAndFiles = arrayOfDirsAndFiles;
     }
 
+    public static void deleteDirectory(int directoryBlockNum)
+    {
+        // update rootheader number of dir and files
+        try(RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath,"rw"))
+        {
+            randomAccessFile.seek(calculatePointerWithBlockNum((short)directoryBlockNum));
+            setIsAllocatedFlag(randomAccessFile,(byte)0);
+
+            short[] arrayOfDirsAndFiles = getArrayOfDirsAndFiles(randomAccessFile);
+
+            for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
+            {
+                if(arrayOfDirsAndFiles[i]>0)
+                    deleteDirectory(arrayOfDirsAndFiles[i]);
+                if(arrayOfDirsAndFiles[i]<0)
+                    deleteMFTFile()
+            }
+
+
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+
+
     public static String getNameOfDirectory(RandomAccessFile randomAccessFile) throws IOException
     {
         randomAccessFile.seek(randomAccessFile.getFilePointer() + 1);
@@ -52,7 +81,7 @@ public class DirectoryClass
         return readName.trim();
     }
 
-    public static long getPointerPositionForGivenBlock(short blockNum)
+    public static long calculatePointerWithBlockNum(short blockNum)
     {
         if (blockNum == 0)
             return 0;
@@ -97,6 +126,7 @@ public class DirectoryClass
         return (short) (position / (long) DirectoryClass.DIRHEADERSIZE + 1);
     }
 
+
     public static short findDirectoryByName(RandomAccessFile randomAccessFile, String name) throws IOException
     {
         // long previousPointerPosition = randomAccessFile.getFilePointer();
@@ -114,7 +144,7 @@ public class DirectoryClass
                 if (tempArrayOfDirsAndFiles[i] == 32555)
                     continue;
 
-                randomAccessFile.seek(getPointerPositionForGivenBlock(tempArrayOfDirsAndFiles[i]));
+                randomAccessFile.seek(calculatePointerWithBlockNum(tempArrayOfDirsAndFiles[i]));
                 readName = DirectoryClass.getNameOfDirectory(randomAccessFile);
 
                 if (pathArray[1].equals(readName))
@@ -201,7 +231,7 @@ public class DirectoryClass
     {
         randomAccessFile.seek(randomAccessFile.getFilePointer() + 91);
         for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
-           randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
+            randomAccessFile.writeShort(arrayOfDirsAndFiles[i]);
 
         randomAccessFile.seek(randomAccessFile.getFilePointer() - DIRHEADERSIZE);
 
@@ -260,10 +290,10 @@ public class DirectoryClass
             }
 
             tempArray[indexOf35222] = calculateDirectoryBlockWithPointer(getEndOfDirectoryHeaderBlock());
-            if(currentBlockNum==0)
+            if (currentBlockNum == 0)
                 RootHeader.setArrayOfDirsAndFiles(tempArray);
             else
-                DirectoryClass.setArrayOfDirsAndFiles(randomAccessFile,tempArray);
+                DirectoryClass.setArrayOfDirsAndFiles(randomAccessFile, tempArray);
 
 
             //TODO: treba sve pobdatke o novom direktorijumu u konstruktor
@@ -298,9 +328,9 @@ public class DirectoryClass
         randomAccessFile.seek(randomAccessFile.getFilePointer() - DIRHEADERSIZE);
     }
 
-    public void setIsAllocatedFlag(RandomAccessFile randomAccessFile, byte isAllocatedFlag) throws IOException
+    public static void setIsAllocatedFlag(RandomAccessFile randomAccessFile, byte isAllocatedFlag) throws IOException
     {
-        this.isAllocatedFlag = isAllocatedFlag;
+//        this.isAllocatedFlag = isAllocatedFlag;
         randomAccessFile.writeByte(isAllocatedFlag);
         randomAccessFile.seek(randomAccessFile.getFilePointer() - 1);
     }

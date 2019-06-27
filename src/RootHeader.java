@@ -34,11 +34,7 @@ public class RootHeader
 
     public RootHeader(String name)
     {
-        //TODO: NE DIRAJ MOJE! filip
-
-        for (; name.length()<14;) name=name+ " ";
-        System.out.println(name + " " + name.length());
-        nameOfFileSystem = name;
+        nameOfFileSystem = String.format("%-14s", name);;
         lastUsed = dateCreated = lastModified = Utilities.getCurrentDate();
         numberOfDirectoriums = 0;
         numberOfFiles = 0;
@@ -47,7 +43,7 @@ public class RootHeader
         sizeOfMFTFiles = 0;
         sizeOfMFTFileHeaders = 0;
         arrayOfDirs= new short[103];
-        Arrays.fill(arrayOfDirs,(short)32555);  // dodao filip
+        Arrays.fill(arrayOfDirs,(short)32555);
         this.writeFileHeader();
 
     }
