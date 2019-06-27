@@ -27,21 +27,22 @@ public class FileHeader
         if (isMFTfile == 1) DataBlock = datablocks;
     }
 
-    public void writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file)
+    public int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file)
     {
         try
         {
         	int helpcounter=0;
         	file.seek(MainClass.ONEMB-106);
+        	int maincounter=0;
         	 int numberofMFTfiles=0;
         	    int numberofMFTheaders=0;
         	    System.out.println(rootheader.getsizeOfMFTFileHeaders()+" "+rootheader.getSizeOfMFTFiles());
-  
         	    byte allocationflag, mftflag;  					//prvo pokretanje
   if((rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles())==0)    file.seek(file.getFilePointer()-64);
   else {
         	    for(int i=(rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles());i>0;i--)
         	    { 
+        	    maincounter++;
         	    allocationflag=file.readByte(); 
         	    mftflag=file.readByte(); 
         	    if(mftflag==1) numberofMFTfiles++; else numberofMFTheaders++; 
@@ -76,7 +77,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
 				Math.ceil(numberOfBlocks);
             } else 
             	{	fileSize=0; numberOfBlocks=-1; }  
-            startBlock=object.writeDataInDataSegment(numberOfBlocks, NameOfFile);
+            if(fileSize>64)  startBlock=object.writeDataInDataSegment(numberOfBlocks, NameOfFile);
             file.writeInt(startBlock);         //4
             file.writeInt(numberOfBlocks);     //4
             file.writeUTF(DateCreated);     //24
@@ -84,10 +85,16 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
             file.writeUTF(DateLastModified);//24
             if (isMFTfile==1) rootheader.setSizeOfMFTFiles(rootheader.getSizeOfMFTFiles()+1); 
             else rootheader.setsizeOfMFTFileHeaders(rootheader.getsizeOfMFTFileHeaders()+1); 
-            rootheader.stats();
+            if (isMFTfile==0)
+            	{
+            	rootheader.setUsedSpaceDS(rootheader.getUsedSpaceDS()+fileSize); 
+            	rootheader.setFreeSpaceDS(rootheader.getFreeSpaceDS()-fileSize);
+            	}
+            rootheader.setLastModified(Utilities.getCurrentDate());
+             return maincounter;
          } catch (Exception e)
-        {
-        }
+        {}
+ return 0; 
     }
     public int searchMFTfiles(RootHeader rootheader,RandomAccessFile file,String filename)
     {
@@ -98,6 +105,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         		file.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
          	    String temp; 
+         	    rootheader.setLastUsed(Utilities.getCurrentDate());
         	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
         	    { 
         	    file.readByte();		//preskacemo allocate fleg
@@ -118,6 +126,28 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return -1;			//greska 
     }
+    public String searchFileHeaderBYPosition(RootHeader rootheader,RandomAccessFile file,int position)
+    { 
+    	  try
+          {
+           		file.seek(MainClass.ONEMB-106);
+           	    byte  mftflag; 
+            	rootheader.setLastUsed(Utilities.getCurrentDate());
+          	    for(int i=position;i>0;i--)
+          	    { 
+          	    file.readByte();		 
+           	    mftflag=file.readByte(); 
+           	    if (mftflag==1) file.seek(file.getFilePointer()-194);
+           	    else file.seek(file.getFilePointer()-108);
+          	    } 
+          	    file.readByte();
+          	    file.readByte(); 
+          	    return file.readUTF(); 
+          	   
+          } catch (Exception e)	// 1-fajl pronadjen
+          {}
+    	  return null; 
+    }
     public byte [] READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
@@ -126,6 +156,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         		file.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
          	    String temp; 
+         	    rootheader.setLastModified(Utilities.getCurrentDate());
          	    byte [] array=new byte[64];
         	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
         	    { 
@@ -134,7 +165,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
           	    	 temp=file.readUTF();
          	    	System.out.println(temp+ " " +  temp.length());
          	    	System.out.println(filename+ " "+filename.length());		 
-           	    		if(filename.equals(temp))  //citanje obicnog (data) fajla 
+           	    		if(filename.equals(temp) && mftflag==0)  //citanje obicnog (data) fajla 
            	    			{
  	    						file.readInt(); 
 	    						int  startblock=file.readInt(); 
@@ -218,6 +249,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
            	    						file.readInt(); 
            	    						int  startblock=file.readInt(); 
            	    						int numberofblocks=file.readInt(); 
+           	    						
            	    						DataSegment object=new DataSegment(); 
            	    						object.deleteFileInDataSegment(startblock, numberofblocks);
            	    					}      	    	 
