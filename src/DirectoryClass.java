@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Random;
 
 public class DirectoryClass
 {
@@ -25,9 +26,7 @@ public class DirectoryClass
         arrayOfDirsAndFiles = new short[82];
         for (int i = 0; i < arrayOfDirsAndFiles.length; i++)
             arrayOfDirsAndFiles[i] = (short) 32555;
-
         this.size = 0;
-
     }
 
     public DirectoryClass(byte isAllocatedFlag, String nameOfDirectory, byte depthFlag, String dateCreated, String dateUsed, String dateModified, int size, short[] arrayOfDirsAndFiles)
@@ -132,7 +131,6 @@ public class DirectoryClass
     // za dobijenu poziciju u MTFblocku izracunaj redni broj bloka
     public static short calculateDirectoryBlockWithPointer(long currentPosition)
     {
-
         long position = currentPosition - RootHeader.ROOTHEADERSIZE;
         if (position < 0)
             return 0;
@@ -225,9 +223,8 @@ public class DirectoryClass
     {
         randomAccessFile.seek(randomAccessFile.getFilePointer() + 18);
         String dateCreated = randomAccessFile.readUTF();
-        randomAccessFile.seek(randomAccessFile.getFilePointer() - 41);    // 18+23
+        randomAccessFile.seek(randomAccessFile.getFilePointer() - 41);   // 18+23
         return dateCreated;
-
     }
 
     public static String getDateUsed(RandomAccessFile randomAccessFile) throws IOException

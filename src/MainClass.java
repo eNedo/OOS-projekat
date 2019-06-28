@@ -1,6 +1,9 @@
+import com.sun.tools.javac.Main;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -278,6 +281,28 @@ public class MainClass
         System.out.println("Mozete poceti manipulisati sa fajl sistemom.");
         return p;
     }
+
+    public void create(String path,RandomAccessFile file, RootHeader root) {
+        String[] splitPath = Utilities.splitStringWithSeparator(path);
+
+        String fileName = splitPath[splitPath.length - 1];
+        String delimiter = "/";
+        String tempPath = String.join(delimiter,splitPath);
+        tempPath.replace(fileName,"");
+        tempPath = tempPath.substring(0,tempPath.length() - 1);
+        try {
+        int directoryBlock = DirectoryClass.findDirectoryByPath(file,tempPath);
+            file.seek(directoryBlock);
+            short[] tempArray = DirectoryClass.getArrayOfDirsAndFiles(file);
+            for(int i = 0;i<tempArray.length;i++)
+                if(tempArray[i]==32555 || tempArray[i]>20000 || tempArray[i]<20000)
+                    tempArray[i] = writeToFile(fileName,0);
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 public short  FollowFilePath(RootHeader rootheader,RandomAccessFile file,String path,int currentposition) throws Exception
     { 
       short []temp1 =new short[82];

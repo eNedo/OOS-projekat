@@ -1,6 +1,7 @@
 import java.io.*;
 import java.lang.Math; 
 import java.lang.*;
+
 public class FileHeader
 {
     private byte isAllocated;       //2
@@ -27,7 +28,9 @@ public class FileHeader
         if (isMFTfile == 1) DataBlock = datablocks;
     }
 
-    public  int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String ojsa)
+
+
+    public  int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String ojsal)
     {
         try
         {
@@ -132,12 +135,12 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
     	  try
           {
            		file.seek(MainClass.ONEMB-106);
-           	    byte  mftflag; 
+           	    byte  mftflag;
             	rootheader.setLastUsed(Utilities.getCurrentDate());
           	    for(int i=position;i>0;i--)
           	    { 
           	    file.readByte();		 
-           	    mftflag=file.readByte(); 
+           	    mftflag=file.readByte();
            	    if (mftflag==1) file.seek(file.getFilePointer()-194);
            	    else file.seek(file.getFilePointer()-108);
           	    } 
@@ -235,7 +238,8 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         {
         }
         return -1;			
-    } 
+    }
+
     public  static void deleteMFTFile(RootHeader rootheader,RandomAccessFile file,int position)
     {
         try

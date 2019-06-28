@@ -11,7 +11,6 @@ public class Utilities
     public static String[] splitStringWithSeparator(String inputString)
     {
         return inputString.split("/");
-
     }
 
     public static String getCurrentDate()
@@ -19,7 +18,6 @@ public class Utilities
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'u' HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
-
     }
 
     public static int calculateNumOfBlocks(long numOfBytes)

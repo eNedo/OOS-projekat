@@ -1,4 +1,6 @@
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -394,6 +396,28 @@ public class RootHeader
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public boolean checkIfFileCanBeWritten(String fileName) {
+        try {
+            if(fileName.length() > 20) {
+                System.out.println("Greška. Predugačak naziv fajla");
+                return false;
+            }
+            RandomAccessFile file = new RandomAccessFile(fileName,"rw");
+            if(file.length() > 64000) {
+                System.out.println("Greška. Prevelika veličina fajla");
+                return false;
+            }
+            return true;
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public static void setArrayOfDirsAndFiles(short[] arrayOfDirsAndFiles)
