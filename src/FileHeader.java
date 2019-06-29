@@ -1,10 +1,9 @@
 import java.io.*;
-import java.lang.Math; 
 import java.lang.*;
-
+import java.util.Arrays;
 public class FileHeader
 {
-    private byte isAllocated;       //2
+    private byte isAllocated=1;       //2
     private byte isMFTfile;
     private String NameOfFile;      //20
     private int fileSize;           //4
@@ -14,7 +13,8 @@ public class FileHeader
     private String DateLastUsed;    //24
     private String DateLastModified;//24
     private byte[] DataBlock;       //64
-
+// obicni fajl heder 106bajta
+// mft fajl heder (106+64)bajta
     public FileHeader(String name, int filesize, int numberofblocks, int startingblock, byte isMFTfile, byte[] datablocks)
     {
         NameOfFile = name;
@@ -25,24 +25,23 @@ public class FileHeader
         this.numberOfBlocks = numberofblocks;
         startBlock=startingblock;
         this.isMFTfile = isMFTfile;
-        if (isMFTfile == 1) DataBlock = datablocks;
+        if (isMFTfile == 1)  this.DataBlock =datablocks;
+        else if(filesize>64) this.DataBlock=datablocks;
     }
 
-
-
-    public  int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String ojsal)
+    public   int  writeFiletoMFTheader(RootHeader rootheader,RandomAccessFile file, String filename)
     {
         try
         {
-        	NameOfFile=ojsa;
+        	NameOfFile=filename;
         	int helpcounter=0;
         	file.seek(MainClass.ONEMB-106);
         	int maincounter=0;
         	 int numberofMFTfiles=0;
         	    int numberofMFTheaders=0;
-        	    System.out.println(rootheader.getsizeOfMFTFileHeaders()+" "+rootheader.getSizeOfMFTFiles());
-        	    byte allocationflag, mftflag;  					//prvo pokretanje
-  if((rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles())==0)    file.seek(file.getFilePointer()-64);
+        	    byte allocationflag, mftflag=0;  					//prvo pokretanje
+  if((rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles())==0 && isMFTfile==1)    file.seek(file.getFilePointer()-64);
+  else if(rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles()==0 && isMFTfile==0) file.seek(file.getFilePointer()); 
   else {
         	    for(int i=(rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles());i>0;i--)
         	    { 
@@ -53,31 +52,40 @@ public class FileHeader
         	    if (isMFTfile==1 && allocationflag==1 && mftflag==1){helpcounter++; file.seek(file.getFilePointer()-66); break ; } 
         	    if (isMFTfile==0 && allocationflag==1) {helpcounter++; file.seek(file.getFilePointer()-2);  break; }
           	    if (i!=1) {if(mftflag==1)
-          	    	file.seek(file.getFilePointer()-174);
+          	    	file.seek(file.getFilePointer()-172);
           	    else file.seek(file.getFilePointer()-108); 
         	    }
         	    }
         	    if (helpcounter==0){
-if (isMFTfile==1 && 170<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )  
-	file.seek(file.getFilePointer()-238); 
+if (isMFTfile==1 && mftflag==0 && 170<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )  
+	file.seek(file.getFilePointer()-172); 
         	    else // provjera za granicne slucajeve tj. da li ima memorije za upis
-if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )	
-	file.seek(file.getFilePointer()-108);
+        	    	if (isMFTfile==1 && mftflag==1 && 170<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )  
+        	    		file.seek(file.getFilePointer()-236); 
+        	    	else 
+        	    		if (isMFTfile==0 && mftflag==0 && 170<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )  
+        	    			file.seek(file.getFilePointer()-108); 
+        	    		else 
+if(isMFTfile==0 && mftflag==1 && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*255+347)-(numberofMFTfiles*170)-(numberofMFTheaders*106)) )	
+	file.seek(file.getFilePointer()-172);
         	    }
         	  } 
   // upis 
-        	if (isMFTfile == 1) 
-        		file.write(DataBlock); //64
+  if(isMFTfile==1 || fileSize<64) {
+  byte temp[]=new byte[64];
+  for (int i=0;DataBlock.length>i;i++) temp[i]=DataBlock[i]; 
+  Arrays.fill(temp, DataBlock.length, 64,  (byte)32);
+  file.write(temp); //64
+  }
         	file.writeByte(isAllocated);       //2
         	file.writeByte(isMFTfile);
             for (;NameOfFile.length()<18;)
             	NameOfFile=NameOfFile+" "; 
             file.writeUTF(NameOfFile);      //20  -18 karaktera ime (UTF) 
-            System.out.println(NameOfFile+ " "+ NameOfFile.length()); 
             file.writeInt(fileSize);               //4
             DataSegment object=new DataSegment();
             if(fileSize!=0) 	{ 
-				numberOfBlocks=fileSize/123;
+				numberOfBlocks=fileSize/123+1;
 				Math.ceil(numberOfBlocks);
             } else 
             	{	fileSize=0; numberOfBlocks=-1; }  
@@ -104,8 +112,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
     {
         try
         {
-        		rootheader.stats(); 
-        		for (; filename.length()<18;) filename=filename+" ";
+         		for (; filename.length()<18;) filename=filename+" ";
         		file.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
          	    String temp; 
@@ -117,9 +124,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
          	    if (mftflag==1) 
          	    	{ 
          	    	 temp=file.readUTF();
-         	    	System.out.println(temp+ " " +  temp.length());
-         	    	System.out.println(filename+ " "+filename.length());		//TODO  
-           	    		if(filename.equals(temp)) return 1;
+             	    		if(filename.equals(temp)) return 1;
          	    	}
          	    if (mftflag==1) file.seek(file.getFilePointer()-194);
          	    else file.seek(file.getFilePointer()-108);
@@ -130,17 +135,43 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return -1;			//greska 
     }
-    public String searchFileHeaderBYPosition(RootHeader rootheader,RandomAccessFile file,int position)
+    public static int searchMFTHeadersByName(RootHeader rootheader,RandomAccessFile file,String filename)
+    {
+        try
+        {
+         		for (; filename.length()<18;) filename=filename+" ";
+        		file.seek(MainClass.ONEMB-106);
+         	    byte  mftflag; 
+         	    String temp; 
+         	    rootheader.setLastUsed(Utilities.getCurrentDate());
+        	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
+        	    { 
+        	    file.readByte();		//preskacemo allocate fleg
+         	    mftflag=file.readByte(); 
+          	    	 
+         	    	 temp=file.readUTF();
+            	    		if(filename.equals(temp)) return 1;
+         	    	 
+         	    if (mftflag==1) file.seek(file.getFilePointer()-194);
+         	    else file.seek(file.getFilePointer()-108);
+        	    } 
+        	    return 0; 		// 0-fajl nije pronadjen
+        } catch (Exception e)	// 1-fajl pronadjen
+        {
+        }
+        return -1;			//greska 
+    }
+    public static String searchFileHeaderBYPosition(RootHeader rootheader,RandomAccessFile file,int position)
     { 
     	  try
           {
            		file.seek(MainClass.ONEMB-106);
-           	    byte  mftflag;
+           	    byte  mftflag; 
             	rootheader.setLastUsed(Utilities.getCurrentDate());
           	    for(int i=position;i>0;i--)
           	    { 
           	    file.readByte();		 
-           	    mftflag=file.readByte();
+           	    mftflag=file.readByte(); 
            	    if (mftflag==1) file.seek(file.getFilePointer()-194);
            	    else file.seek(file.getFilePointer()-108);
           	    } 
@@ -162,7 +193,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
 		System.out.println("Datum kada je posljednje modifikovan: " + DateLastModified);
 	}
 
-    public  byte [] READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
+    public  static byte [] READFILE(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
         {
@@ -177,15 +208,13 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         	    file.readByte();	 
          	    mftflag=file.readByte(); 
           	    	 temp=file.readUTF();
-         	    	System.out.println(temp+ " " +  temp.length());
-         	    	System.out.println(filename+ " "+filename.length());		 
-           	    		if(filename.equals(temp) && mftflag==0)  //citanje obicnog (data) fajla 
+             	    		if(filename.equals(temp) && mftflag==0)  //citanje obicnog (data) fajla 
            	    			{
  	    						file.readInt(); 
 	    						int  startblock=file.readInt(); 
 	    						int numberofblocks=file.readInt(); 
 	    						DataSegment object=new DataSegment(); 
-	    						array=object.readDataFromDataSegment (startblock, numberofblocks, (int)fileSize);
+	    						array=object.readDataFromDataSegment (startblock, numberofblocks);
 	    						return array;
            	    			}
            	    if (filename.equals(temp) && mftflag==1) //citanje mft fajla 
@@ -203,12 +232,11 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         }
         return null; 
     }
-    public int recoverFile(RootHeader rootheader,RandomAccessFile file,String filename)
+    public int recoverFile(RootHeader rootheader,RandomAccessFile file,String filename)	//opciono
     {
         try
         {
-        		rootheader.stats(); 
-        		for (; filename.length()<18;) filename=filename+" ";
+         		for (; filename.length()<18;) filename=filename+" ";
         		file.seek(MainClass.ONEMB-106);
          	    byte  mftflag; 
          	    String temp; 
@@ -217,9 +245,7 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         	    file.readByte();		
          	    mftflag=file.readByte(); 
          	    temp=file.readUTF();
-         	    	System.out.println(temp+ " " +  temp.length());
-         	    	System.out.println(filename+ " "+filename.length());		//TODO  
-           	    		if(filename.equals(temp)) 
+             	    		if(filename.equals(temp)) 
            	    					{
            	    						file.seek(file.getFilePointer()-22); byte temp2=1;
            	    						file.writeByte(temp2);
@@ -238,25 +264,15 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         {
         }
         return -1;			
-    }
-
-    public  static void deleteMFTFile(RootHeader rootheader,RandomAccessFile file,int position)
+    } 
+    public  static void deleteMFTFile(RootHeader rootheader,RandomAccessFile file)
     {
         try
         {
-         		file.seek(MainClass.ONEMB-106);
-         	    byte  mftflag; 
-         	    for(int i=position;i>0;i--)
-        	    { 
-        	    file.readByte();		 
+          	    byte  mftflag; 
+        	    file.writeByte(0);		 
          	    mftflag=file.readByte();  	    	 
-         	    if (mftflag==1) file.seek(file.getFilePointer()-194);
-         	    else file.seek(file.getFilePointer()-108);
-        	    } 
-         	    	file.seek(file.getFilePointer()-22);
-         	    	byte temp2=0;
-					file.writeByte(temp2);
-					file.readUTF(); 
+    					file.readUTF(); 
 					int size=file.readInt(); 
 					int  startblock=file.readInt(); 
 					int numberofblocks=file.readInt(); 	
@@ -267,33 +283,26 @@ if(isMFTfile==0  && 106<(MainClass.ONEMB-(rootheader.getNumberOfDirectoriums()*2
         {}
           
     }
-    public   long getFileHeaderPosition(RootHeader rootheader,RandomAccessFile file,String filename)
+    public static  long  getFileHeaderPosition(RootHeader rootheader,RandomAccessFile file,String filename)
     {
         try
         {
          		for (; filename.length()<18;) filename=filename+" ";
         		file.seek(MainClass.ONEMB-106);
-         	    byte  mftflag; 
-         	    String temp; 
+          	    String temp; 
+          	    byte mftflag;
         	    for(int i=rootheader.getsizeOfMFTFileHeaders()+rootheader.getSizeOfMFTFiles();i>0;i--)
         	    { 
         	    file.readByte();		//preskacemo allocate fleg
          	    mftflag=file.readByte(); 
-         	    if (mftflag==1) 
-         	    	{ 
          	    	 temp=file.readUTF();
-         	    	System.out.println(temp+ " " +  temp.length());
-         	    	System.out.println(filename+ " "+filename.length());		//TODO  
-           	    		if(filename.equals(temp)) 
+             	    		if(filename.equals(temp)) 
            	    					{
-           	    						file.seek(file.getFilePointer()-22);  
-            	    					return file.getFilePointer();
+           	    						return file.getFilePointer()-22;
            	    					}
-         	    	}
-         	    if (mftflag==1) file.seek(file.getFilePointer()-194);
-         	    else file.seek(file.getFilePointer()-108);
+          	    if (mftflag==1) file.seek(file.getFilePointer()-192);
+         	    else file.seek(file.getFilePointer()-128);
         	    } 
-        	    return -1; 		 
         } catch (Exception e)	 
         {
         }
