@@ -1,9 +1,6 @@
-import com.sun.tools.javac.Main;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -12,104 +9,167 @@ public class MainClass
     public static final long ONEMB = 1024 * 1024;
     private static final long SYSTEMSIZE = 1024 * 1024 * 20;
     public static String FileSystemPath = "./FILESYSTEM";
-
-
     public static void main(String args[]) throws IOException
     {
         File FS = new File(FileSystemPath);
         RandomAccessFile FAJL = new RandomAccessFile(FS, "rw");
         Scanner input = new Scanner(System.in);
         RootHeader fh = new RootHeader(" ");
+        FAJL.setLength(SYSTEMSIZE);
+        DataSegment.prepairDataSegment(); 
         if (checkExistance(FAJL, input))
             fh = firstStart(FAJL, input);
         else
-            fh.updateFileHeader();
+            fh.updateFileHeader(); 
         cmd(fh, FAJL, input);
         FAJL.close();
         input.close();
-
     }
 
     private static void cmd(RootHeader rootheader, RandomAccessFile file, Scanner input)
     {
         try
-        {
-            byte GLOBALROOT = 0;
-            int DIR_POSITION_OF_CMD = 1;
-            final String Warning = "Pogresan broj argumenata!";
+        {		//TODO-dodati pozicioniranje kroz fajl sistem (promjena trenutnog direktorijuma)
+              final String Warning = "Pogresan broj argumenata!";
             String takeInput = "";
-            String DIRposition = "root";
-            String Parent = "root";
-            while (input != null && !("exit".equals(takeInput)))
+             while (input != null && !("exit".equals(takeInput)))
             {
-                System.out.print(DIRposition + ":");
-
+                System.out.print("root:");
                 takeInput = input.nextLine();
                 String words[] = takeInput.split(" ");  // napravi niz rijeci od unjetog teksta
 
                 switch (words[0])
                 {
                     case "mkdir":   // kreiranje novog direktorijuma na zadatoj putanji,
-                        if (!takeInput.matches("(^mkdir (\"[\\w ]+\"$))|(^mkdir (\\w+$))"))
-                        {
+                        if (!(words.length>2))
+                        {			// pogresan unos 
                             System.out.println(Warning);
                             break;
                         } else
                         {
-                            //byte tmp[] = new byte[64];
-                           // byte temp2 = 1;
-                            //for (int i = 0; 64 > i; i++)
-                             //   tmp[i] = 1;
-                           // FileHeader novifajl = new FileHeader(words[1], 64, 0, 0, temp2, tmp);
-                            //System.out.println(novifajl.getNameOfFile(f).length());
-                            //novifajl.writeFiletoMFTheader(rootheader, file);
-                            //System.out.println("uspjeh ili ne" + novifajl.searchMFTfiles(rootheader, file, words[1]));
-                            //String in=input.nextLine();
-                            //if (in.equals("da")) novifajl.deleteMFTFile(rootheader, file, words[1]);
-                         
-                        }
-
+                    DirectoryClass object=new DirectoryClass(words[2],(byte)1);
+                    String temppath[]=words[1].split("/"); 
+                    if (temppath[0].equals("root")) { 
+                     	if (temppath.length==2) // root/dir1
+                    		{ 
+                    		if (object.searchDirectoryByName(rootheader, file, temppath[1])>=0) 
+                    					{
+                    					object.createNewDirectory(rootheader, file);
+                    					int positionfornewdir=object.searchDirectoryByName(rootheader, file, words[2]);
+                    					if(object.mkdir(rootheader, file, words[1],(short)positionfornewdir)) System.out.println("Uspjesno je napravljen "+ words[2] +" direktorijum!"); 
+                    					else System.out.println("Neuspjesno pravljenje direktorijuma!"); 
+                    					}
+                    		else System.out.println("Ne postoji: " + temppath[1] + " direktorijum!"); 
+                    		}
+                    	else if (temppath.length==1) //root
+                    	{ 
+                    		object.createNewDirectory(rootheader, file);
+        					int positionfornewdir=object.searchDirectoryByName(rootheader, file, words[2]);
+        					if(object.mkdir(rootheader, file, words[1],(short)positionfornewdir)) System.out.println("Uspjesno je napravljen "+ words[2] +" direktorijum!"); 
+        					else System.out.println("Neuspjesno pravljenje direktorijuma!"); 
+                    	}	//root/dir1/dir2
+                    	if(temppath.length==3) System.out.println("Ne mozete kreirati direktorijum na toj dubini!!!"); 
+                    }
+                  }
                         break;
-
                     case "create": // kreiranje nove datoteke na zadatoj putanji,
-                        if (!takeInput.matches("^create [\\w\\/]*\\w+\\.\\w{1,4}"))
-                        {
-                            System.out.println(Warning);
-                            break;
-                        } else
-                        {
-                            System.out.println("create je unesen");
-                        }
+                    	  if (!(words.length>2))
+                          {			// pogresan unos 
+                              System.out.println(Warning);
+                           } else
+                          {
+                      DirectoryClass object=new DirectoryClass(words[2],(byte)1);
+                      String temppath[]=words[1].split("/"); 
+                      if (temppath[0].equals("root")) { 
+                      	System.out.println(temppath.length);
+                      	if (temppath.length==2) // root/dir1
+                      		{ 
+                      		if (object.searchDirectoryByName(rootheader, file, temppath[1])>=0) 
+                      					{
+                       					if(object.create(rootheader, file, words[2], temppath[1])) System.out.println("Uspjesno je napravljen "+ words[2] +" fajl!"); 
+                       					else System.out.println("Neuspjesno pravljenje fajla!"); 
+                      					}
+                      		else System.out.println("Ne postoji: " + temppath[2] + " fajl!"); 
+                      		}
+                      	else if (temppath.length==1) //root
+                      	{ 
+           					 
+          					if(object.create(rootheader, file, words[2], temppath[0])) System.out.println("Uspjesno je napravljen "+ words[2] +" fajl!"); 
+          					else System.out.println("Neuspjesno pravljenje fajla!"); 
+                      	}	//root/dir1/dir2
+                      	if(temppath.length==3)  
+                      	{
+                      		if(object.create(rootheader, file, words[2], temppath[2])) System.out.println("Uspjesno je napravljen "+ words[2] +" fajl!"); 
+       					else System.out.println("Neuspjesno pravljenje fajla!");  
+                      		
+                      	}
+                      }
+                       }
                         break;
-
                     case "put": // "upload" datoteke sa postojeceg fajl sistema na novi fajl sistem,
-                        if (!takeInput.matches("^put [\\w\\/]+ [\\w\\/]+")) // TODO: mozda ograniciti ime datoteke
-                        {
-                            System.out.println(Warning);
-                        } else
-                        {
-                            System.out.println("put je unesen!");
-                        }
+                    	 if (!(words.length>2))
+                         {			// pogresan unos 
+                             System.out.println(Warning);
+                          } else
+                         {
+                     DirectoryClass object=new DirectoryClass(words[2],(byte)1);
+                     String temppath[]=words[1].split("/"); 
+                     if (temppath[0].equals("root")) { 
+                      	if (temppath.length==2) // root/dir1
+                     		{ 
+                     		if (object.searchDirectoryByName(rootheader, file, temppath[1])>=0) 
+                     					{
+                      					if(object.put(rootheader, file, words[2], temppath[1])) System.out.println("Uspjesno je napravljen "+ words[2] +" fajl!"); 
+                      					else System.out.println("Neuspjesno pravljenje fajla!"); 
+                     					}
+                     		else System.out.println("Ne postoji: " + temppath[1] + " fajl!"); 
+                     		}
+                     	else if (temppath.length==1) //root
+                     	{ 
+          					 
+         					if(object.put(rootheader, file, words[2], temppath[0])) System.out.println("Uspjesno je napravljen "+ words[2] +" fajl!"); 
+         					else System.out.println("Neuspjesno pravljenje fajla!"); 
+                     	}	//root/dir1/dir2
+                     	if(temppath.length==3)  
+                     	{
+                     		if(object.put(rootheader, file, words[2], temppath[2])) System.out.println("Uspjesno je napravljen "+ words[2] +" fajl!"); 
+      					else System.out.println("Neuspjesno pravljenje fajla!");  
+                     		
+                     	}
+                     }
+                      }
                         break;
 
                     case "get": // "download" datoteke sa novog fajl sistema na postojeÄ‡i,
-                        if (!takeInput.matches("^get [\\w\\/]+ [\\w\\/]+")) // TODO: mozda ograniciti ime datoteke
-                        {
-                            System.out.println(Warning);
-                        } else
-                        {
-                            System.out.println("get je unesen");
-                        }
+                   	 if (!(words.length>2))
+                   	 	{			// pogresan unos 
+                         System.out.println(Warning);
+                   	 	}
+                   else
+                  {
+                  	if (words[2].length()>0) // root/dir1
+                 		{ 
+                 		if (FileHeader.searchMFTHeadersByName(rootheader, file,words[1])>=0) 
+                 		DirectoryClass.get(rootheader, file, words[1],words[2]);
+                 		else System.out.println("Ne postoji: " + words[1] + " fajl!"); 
+                 		}
+                  }
                         break;
-
+                        
                     case "ls": // izlistavanje sadrzaja direktorijuma na zadatoj putanji,
+                    	
+                   	 if (!(words.length>1))
+                	 	{			// pogresan unos 
+                      System.out.println(Warning);
+                	 	} else {
                         System.out.println("ls je unesen");
-                        DirectoryClass dir = new DirectoryClass(" ", (byte) 0);
-                        // dir.listDirectory(f, p);
-                        break;
+                        if(words[1].length()>0) 
+                         DirectoryClass.listDirectoriums(rootheader, file, words[1]); 
+                	 	}
+                         break;
 
                     case "cp": // kreiranje kopije datoteke na zadatoj putanji,
-                        if (!takeInput.matches("^cp [\\w\\/]+ [\\w\\/]+")) // TODO: mozda ograniciti ime datoteke
+                        if (!takeInput.matches("^cp [\\w\\/]+ [\\w\\/]+")) // TODO 
                         {
                             System.out.println(Warning);
                         } else
@@ -118,85 +178,84 @@ public class MainClass
                         }
                         break;
 
-                    case "mv": // premjeÅ¡tanje datoteke iz izvornog u odrediÅ¡ni direktorijum,
-                        if (!takeInput.matches("^mv \\w+ \\w+")) // TODO: mozda ograniciti ime datoteke
+                    case "mv":  
+                    	 if (!(words.length>2))
+                         {			// pogresan unos 
+                             System.out.println(Warning);
+                          } else
                         {
-                            System.out.println(Warning);
-                        } else
-                        {
-                            System.out.println("mv je unesen");
+                            System.out.println("Move je unesen");
+                            DirectoryClass.move(rootheader, file, words[1], words[2]);
                         }
                         break;
 
                     case "rename": // promjena naziva datoteke/direktorijuma,
-                        if (!takeInput.matches("^rename \\w+ \\w+")) // TODO: mozda ograniciti ime datoteke
+                    	 if (!(words.length>2))
+                         {			// pogresan unos 
+                             System.out.println(Warning);
+                          } else
                         {
-                            System.out.println(Warning);
-                        } else
-                        {
-                            System.out.println("rename je unesen");
+                            System.out.println("Rename je unesen");
+                            DirectoryClass object=new DirectoryClass(); 
+                            if(object.rename(rootheader, file, words[1], words[2])) System.out.println("Uspjesno ste preimenovali datoteku/fajl!"); 
+                            else System.out.println("Ne postoji datoteka ili fajl sa navedenim imenom!"); 
+                            
                         }
                         break;
 
                     case "echo": // upis proizvoljnog tekstualnog sadrÅ¾aja u datoteku,
-                        if (!takeInput.matches("^echo (\"?)[\\w\\/ ]+(\\1) > \\w+\\.\\w{1,4}")) // TODO: mozda ograniciti ime datoteke
-                        {
+                    	if (!(words.length>1))
+                        {			// pogresan unos 
                             System.out.println(Warning);
-                        } else
+                         } else
                         {
-                            System.out.println("echo je unesen!");
-                        }
+                        	 System.out.println("Unesite tekst koji zelite upisati u "+words[1]+" datoteku!"); 
+                        	 String temporary;
+                        	 temporary=input.nextLine();
+                        	 DirectoryClass.echo(rootheader, file, words[1], temporary); 
+                        	 
+                     }
                         break;
 
                     case "cat": // prikaz sadrzaja (tekstualne) datoteke,
-                        if (!takeInput.matches("^cat [\\w\\/]+\\.\\w{1,4}"))
-                        {
+                    	if (!(words.length>1))
+                        {			// pogresan unos 
                             System.out.println(Warning);
-                        } else
+                         } else
                         {
-                            System.out.println("cat je unesen");
-                        }
+                        if (DirectoryClass.cat(rootheader, file, words[1])) System.out.println("Uspjesna komanda cat!");
+                        else System.out.println("Neuspjesna komanda cat!"); 
+                     }
                         break;
 
                     case "rm": // brisanje datoteke/direktorijuma uz mogucnost brisanja kompletnog sadrzaja direktorijuma (opcija -r),
-                        if (!takeInput.matches("^rm [\\w\\/]+\\.\\w{1,4}"))
-                        {
-                            System.out.println(Warning);
-
-                        } else
-                        {
-                            System.out.println("rm je unesen");
-                        }
+                    	if (!(words.length>1))
+                	 	{			// pogresan unos 
+                      System.out.println(Warning);
+                	 	} else {
+                        System.out.println("RM je unesen");
+                        if(words[1].length()>0) 
+                         DirectoryClass.deleteDirectory(rootheader, file, words[1]); 
+                	 	}
                         break;
 
                     case "stat":
                         System.out.println("stat je unesen");
-                        rootheader.stats();
-                        break;
-
-                    case "ln": // ln - make links between files (OPCIONO)
-                        if (!takeInput.matches("^ln [\\w\\/]+ [\\w\\/]+")) // TODO: mozda ograniciti ime datoteke
-                        {
-                            System.out.println(Warning);
-                        } else
-                        {
-                            System.out.println("ln je unesen");
-                        }
-                        break;
-
-                    case "grep": // ovo je bas tesko napraviti (OPCIONO)
-                        System.out.println("grep je unesen");
-                        break;
-
+                    	if(words.length==2) 
+                    	{
+                    	DirectoryClass object=new DirectoryClass(); 
+                    	int position=object.searchDirectoryByName(rootheader, file, words[1]); 
+                    	file.seek(RootHeader.ROOTHEADERSIZE+position*DirectoryClass.DIRHEADERSIZE); 
+                    	object.DirectoryInfo(rootheader, file);
+                    	}		// ako ne izaberemo direktorijum, ispisi informacije o fajl sistemu!
+                    	else     rootheader.stats();	 
+                        break; 
                     case "exit":
                         System.out.println("exit je unesen!");
                         System.out.println("Zdravo!");
                         System.exit(0);
                         break;
-                    case "cd":
-                        // putanja ka direktorijumu
-                        break;
-                    default:
+                       default:
                         // dodati 'ulazenje' u direktorijume, promjena trenutne pozicije^^
                 }
 
@@ -205,9 +264,7 @@ public class MainClass
         } catch (Exception e)
         {
         }
-
     }
-
     public static boolean CheckDirectoriums(RootHeader p, RandomAccessFile f, String x)
     {
         try
@@ -228,7 +285,6 @@ public class MainClass
                     sb.append(c);
                 }
                 filename = sb.toString();
-
                 System.out.println(filename);
                 if (x.compareTo(filename) == 0) return true;
             }
@@ -239,6 +295,22 @@ public class MainClass
         return false;
     }
 
+    
+    public static RootHeader firstStart(RandomAccessFile x, Scanner s)
+    {
+         String name;
+        do
+        {
+            System.out.println("Unesite ime novog fajl sistema!");
+            name = s.nextLine();
+        } while (name.length() > 14);
+
+          RootHeader p = new RootHeader(name);
+        System.out.println("Uspjesno smo kreirali novi fajl sistem! ");
+        System.out.println("Mozete poceti manipulisati sa fajl sistemom.");
+        p.writeFileHeader();
+        return p;
+    }
     public static boolean checkExistance(RandomAccessFile x, Scanner input)
     {
         try
@@ -265,64 +337,5 @@ public class MainClass
         }
         return false;
     }
-
-    public static RootHeader firstStart(RandomAccessFile x, Scanner s)
-    {
-        System.out.println("ojsaaa");
-        String name;
-        do
-        {
-            System.out.println("Unesite ime novog fajl sistema!");
-            name = s.nextLine();
-        } while (name.length() > 14);
-
-          RootHeader p = new RootHeader(name);
-        System.out.println("Uspjesno smo kreirali novi fajl sistem! ");
-        System.out.println("Mozete poceti manipulisati sa fajl sistemom.");
-        return p;
-    }
-
-    public void create(String path,RandomAccessFile file, RootHeader root) {
-        String[] splitPath = Utilities.splitStringWithSeparator(path);
-
-        String fileName = splitPath[splitPath.length - 1];
-        String delimiter = "/";
-        String tempPath = String.join(delimiter,splitPath);
-        tempPath.replace(fileName,"");
-        tempPath = tempPath.substring(0,tempPath.length() - 1);
-        try {
-        int directoryBlock = DirectoryClass.findDirectoryByPath(file,tempPath);
-            file.seek(directoryBlock);
-            short[] tempArray = DirectoryClass.getArrayOfDirsAndFiles(file);
-            for(int i = 0;i<tempArray.length;i++)
-                if(tempArray[i]==32555 || tempArray[i]>20000 || tempArray[i]<20000)
-                    tempArray[i] = writeToFile(fileName,0);
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-public short  FollowFilePath(RootHeader rootheader,RandomAccessFile file,String path,int currentposition) throws Exception
-    { 
-      short []temp1 =new short[82];
-      short []temp2 =new short[103];
-       short blocknumber;
-      String words[]=path.split("/"); 
-     String temp=words[0]+"/"+words[1];
-    			blocknumber=DirectoryClass.findDirectoryByPath(file,temp);
-    			if (blocknumber==0) 
-    				{   		
-    				file.seek(DirectoryClass.calculatePointerWithBlockNum((short)blocknumber)); 
-    				temp2=DirectoryClass.getArrayOfDirsAndFiles(file); 
-    				for (int i=0;103>i;i++) if (words[2].equals(FileHeader.searchFileHeaderBYPosition(rootheader, file, temp2[i]))) { return (short)Math.abs(temp2[i]); break;} 
-    				}
-    			else 
-    			{
-    				file.seek(DirectoryClass.calculatePointerWithBlockNum((short)blocknumber)); 
-    				temp1=DirectoryClass.getArrayOfDirsAndFiles(file);
-    				for(int i=0; 82>i;i++) if (words[2].equals(FileHeader.searchFileHeaderBYPosition(rootheader,file,temp1[i]))) { return (short)Math.abs(temp1[i]); break;}
-    			}
-    			return -1; //greska
-    }
+ 
 }
