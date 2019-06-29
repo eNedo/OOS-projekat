@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.Random;
 
 
 public class DataSegment
@@ -81,8 +82,7 @@ public class DataSegment
         }
     }
 
-    // prije ove funkcije potrebno je imati fukciju koja provjerava da li ima dovoljno prostora u dataSegmentu
-    public int[] findArrayOfFreeBlocks(int numOfBlocksNeeded)
+ public int[] findArrayOfFreeBlocks(int numOfBlocksNeeded)
     {
         int[] arrayOfBlocks = new int[numOfBlocksNeeded];
         int i = 0;
@@ -114,91 +114,69 @@ public class DataSegment
     }
 
 
-    public byte[] readDataFromDataSegment(int startingBlock, int numOfBlocks, int fileSize) // Filip version
+    public byte[] readDataFromDataSegment(int startingBlock, int numOfBlocks)  
     {
-        ArrayList<Byte> buffeerArray = new ArrayList<>();
+        byte []bufferArray=new byte[123*numOfBlocks];
         try
         {
             RandomAccessFile randomAccessFileSystem = new RandomAccessFile(MainClass.FileSystemPath, "rw");
             randomAccessFileSystem.seek(MainClass.ONEMB + startingBlock * DataSegmentBlockSize );
-            long currentPosition = MainClass.ONEMB + startingBlock * DataSegmentBlockSize;
-            int nextBlock = 0;
             int blockSize=123;
-            int usedBlock=1;
-            byte isAlloc;
-
-            for (int i = 0; i < numOfBlocks && nextBlock != -1; i++)
+            int nextBlock=0;
+             int helpcounter=0;		//povecavanje indeksa za bufferArray u skladu sa brojem bloka
+             for (int i = 0; i < numOfBlocks && nextBlock != -1; i++)
             {
-                isAlloc=randomAccessFileSystem.readByte();
-
-                for (int j = 0; j < blockSize; j++)
+                if(randomAccessFileSystem.readByte()==1)
                 {
-                    buffeerArray.add(randomAccessFileSystem.readByte());
+
+                for (int j = 123*helpcounter; j <blockSize*(helpcounter+1)  ; j++)
+                {
+                     bufferArray[j]=(randomAccessFileSystem.readByte());
                 }
-
-
-                randomAccessFileSystem.seek(currentPosition+124);
-                nextBlock = randomAccessFileSystem.readInt();
-                usedBlock++;
-                if(usedBlock==numOfBlocks)
-                    blockSize=fileSize-(numOfBlocks-1)*123;
-
+                if(nextBlock>0 && i!=(numOfBlocks-1)) {randomAccessFileSystem.seek(randomAccessFileSystem.getFilePointer()-1);}
+                if((numOfBlocks-1)==i) randomAccessFileSystem.seek(randomAccessFileSystem.getFilePointer()-2);
+                  nextBlock = randomAccessFileSystem.readInt();  
+                 helpcounter++;
+                 if (nextBlock==-1) break; 
                 randomAccessFileSystem.seek(MainClass.ONEMB + nextBlock * DataSegmentBlockSize );
-                currentPosition=MainClass.ONEMB + nextBlock * DataSegmentBlockSize ;
+                }
             }
         } catch (IOException e)
         {
             e.printStackTrace();
         }
-
-
-        byte[] byteArray = new byte[buffeerArray.size()];
-        for (int i = 0; i < byteArray.length; i++)
-        {
-            byteArray[i] = buffeerArray.get(i);
-        }
-        return byteArray;
+        return bufferArray;
     }
 
-
-
-    public int writeDataInDataSegment(int numOfBlocks, String nameOfOutputFile) // Filip version
+    public int writeDataInDataSegment(int numOfBlocks, String nameOfOutputFile)
     {
         int[] arrayOfFreeBlocks = findArrayOfFreeBlocks(numOfBlocks);
         byte[] outputArray;
-
         try
         {
             RandomAccessFile outputFile = new RandomAccessFile(nameOfOutputFile,"rw");
             RandomAccessFile randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath,"rw");
             outputArray = new byte[(int) outputFile.length()];
             outputFile.readFully(outputArray);
-
-
             int currentBlock=0;
             randomAccessFile.seek(calculatePointerWithBlockNum(arrayOfFreeBlocks[currentBlock]));
-            byte isAllocated=randomAccessFile.readByte();
-
-
-
-            for (int i = 1; i <outputArray.length+1; i++)
+            randomAccessFile.writeByte((byte)1);
+             for (int i = 0; i <outputArray.length; i++)
             {
 
-                randomAccessFile.writeByte(outputArray[i-1]);
-                System.out.print((char)outputArray[i-1]);
-                if(i%123==0)
+                randomAccessFile.writeByte(outputArray[i]);  
+                 if(i%122==0 && i!=0)
                 {
+                	 
                     currentBlock++;
                     randomAccessFile.writeInt(arrayOfFreeBlocks[currentBlock]);
-                    randomAccessFile.close();
-                    randomAccessFile = new RandomAccessFile(MainClass.FileSystemPath,"rw");
-                    randomAccessFile.seek(calculatePointerWithBlockNum(arrayOfFreeBlocks[currentBlock]));
-                    isAllocated=randomAccessFile.readByte();
+                      randomAccessFile.seek(calculatePointerWithBlockNum(arrayOfFreeBlocks[currentBlock]));
+                    randomAccessFile.writeByte((byte)1);
                 }
-
-
             }
-
+             for (int i=0;(123*arrayOfFreeBlocks.length-outputArray.length)>i;i++)  
+            { randomAccessFile.writeByte(0); } 
+            randomAccessFile.writeInt(-1);
         }catch(Exception ex)
         {
             ex.printStackTrace();
@@ -206,12 +184,35 @@ public class DataSegment
         return arrayOfFreeBlocks[0];
 
     }
-
-
-
-
-
-
-
+    public static int rewriteBlocksECHO(int startblock,int numOfBlocks, byte[] data)
+    {
+         try
+        {
+            RandomAccessFile file = new RandomAccessFile(MainClass.FileSystemPath,"rw");
+             int currentBlock=0;
+            file.seek(calculatePointerWithBlockNum(startblock));
+            file.writeByte((byte)1);
+            int curentBlock=0;
+            int nextBlock=0;
+            for (int i = 0; i <numOfBlocks; i++)
+            {
+            	file.writeByte(data[i]);
+                 if(i%123==0 && i!=0)
+                {
+                    currentBlock++;
+                    nextBlock=file.readInt();
+                     file.seek(calculatePointerWithBlockNum(nextBlock));
+                    file.writeByte((byte)1);
+                }
+            }
+             for (int i=0;(123*numOfBlocks-data.length)>i;i++)  //dopuna za zadnji blok, koji ne mora 
+            { file.writeByte(0); } 								//popuniti cijeli blok
+            file.writeInt(-1);		//nema narednih blokova za citanje 
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+         return 1;
+    }
 
 }
